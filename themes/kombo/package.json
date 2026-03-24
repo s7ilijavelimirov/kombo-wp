@@ -1,0 +1,56 @@
+{
+  "name": "wp-starter-theme",
+  "version": "1.0.0",
+  "description": "A developer-first Wordpress theme boilerplate",
+  "main": "public/js/script.js",
+  "scripts": {
+    "dev": "concurrently \"webpack --mode development --watch\" \"sass ./src/assets/styles/style.scss ./public/css/style.css --style=expanded --no-source-map --watch\" ",
+    "build": "webpack --mode production && sass ./src/assets/styles/style.scss ./public/css/style.css --style=compressed --no-source-map"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbfraphael/wp-starter-theme.git"
+  },
+  "keywords": [
+    "wordpress",
+    "theme",
+    "blog",
+    "website"
+  ],
+  "author": "RBFraphael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rbfraphael/wp-starter-theme/issues"
+  },
+  "homepage": "https://github.com/rbfraphael/wp-starter-theme#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@studio-freight/lenis": "^1.0.42",
+    "aos": "^2.3.4",
+    "axios": "^1.6.7",
+    "bootstrap": "^5.3.3",
+    "flickity": "^3.0.0",
+    "imask": "^7.4.0",
+    "jquery": "^3.7.1",
+    "jquery-zoom": "^1.7.21"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "@fullhuman/postcss-purgecss": "^6.0.0",
+    "autoprefixer": "^10.4.19",
+    "babel-loader": "^9.1.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^8.2.2",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.70.0",
+    "sass-loader": "^12.1.0",
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack": "^5.90.2",
+    "webpack-cli": "^5.1.4"
+  }
+}

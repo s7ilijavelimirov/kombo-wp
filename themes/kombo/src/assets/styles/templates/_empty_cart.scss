@@ -1,0 +1,14 @@
+.empty-cart-buttons {
+    .empty-card-title-wrapper {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+    .empty-cart-buttons-wrapper {
+        display: flex;
+        gap: 50px;
+        @media (max-width: 1024px) {
+            gap: 25px;
+            flex-direction: column;
+        }
+    }
+}

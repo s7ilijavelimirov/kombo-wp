@@ -1,0 +1,15 @@
+.woocommerce-MyAccount-navigation {
+    display: none !important;
+}
+.woocommerce-MyAccount-content {
+    width: 80% !important;
+    float: none !important;
+    margin: 6rem auto;
+    @media (max-width: 769px) {
+        width: 95% !important;
+    }
+
+    .order-actions-button {
+        background-color: #e6e6e6 !important;
+    }
+}

@@ -1,0 +1,116 @@
+/* Order Received Page Container */
+.woocommerce-order {
+    padding: 233px 0;
+    max-width: 1320px;
+    margin: 0 auto;
+    @media (max-width: 1500px) {
+        padding: 136px 0;
+        max-width: 90%;
+    }
+    @media (max-width: 1024px) {
+        padding: 2rem 0.6rem;
+        max-width: 100%;
+    }
+}
+
+/* Success Message */
+.woocommerce-notice--success {
+    background-color: #feec69;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: black;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Order Details Section */
+.woocommerce-order-details {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    border: 1px solid black;
+}
+.woocommerce-column--shipping-address {
+    display: none;
+}
+/* Order Info List */
+.woocommerce-order-overview {
+    list-style: none;
+    padding: 1.5rem;
+    margin: 0 0 2rem;
+    background: transparent;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid black;
+}
+
+.woocommerce-order-overview li {
+    flex: 1 1 200px;
+    padding: 1rem !important;
+    border: 1px solid black !important;
+    border-radius: 4px;
+    background: #feec69;
+    border-right: 1px solid black !important;
+    @media (max-width: 1500px) {
+        flex: 1 1 100px;
+    }
+}
+
+/* Customer Details */
+.woocommerce-customer-details {
+    background: #feec69;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.woocommerce-columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.woocommerce-column {
+    flex: 1 1 300px;
+}
+
+.woocommerce table.shop_table {
+    border: none;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .woocommerce-notice--success {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+
+    .woocommerce-order-overview {
+        flex-direction: column;
+    }
+
+    .woocommerce-order-overview li {
+        flex: 1 1 100%;
+    }
+
+    .woocommerce-order-details,
+    .woocommerce-customer-details {
+        padding: 1rem;
+    }
+}
+
+/* Table Responsiveness */
+@media screen and (max-width: 576px) {
+    .woocommerce-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

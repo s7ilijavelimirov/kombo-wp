@@ -1,0 +1,21 @@
+.error-404-container {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media (max-width: 1024px) {
+        padding: 4rem 0.7rem;
+    }
+    @media (max-width: 769px) {
+        padding: 4rem 0.7rem;
+    }
+
+    .empty-cart-buttons-wrapper {
+        display: flex;
+        gap: 50px;
+        flex-wrap: wrap;
+        @media (max-width: 1024px) {
+            gap: 25px;
+        }
+    }
+}

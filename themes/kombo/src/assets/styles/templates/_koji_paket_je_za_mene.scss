@@ -1,0 +1,589 @@
+.koji_paket_je_za_mene {
+  padding: 280px 56px;
+  @media (max-width: 2660px) {
+    padding: 100px 56px;
+  }
+  @media (max-width: 1920px) {
+    padding: 280px 56px;
+  }
+  @media (max-width: 1600px) {
+    padding: 160px 56px;
+  }
+  @media (max-width: 1366px) {
+    padding: 188px 32px;
+  }
+  @media (max-width: 1024px) {
+    padding: 94px 32px 200px 32px;
+  }
+  @media (max-width: 769px) {
+    padding: 88px 60px;
+  }
+  @media (max-width: 600px) {
+    padding: 88px 16px;
+  }
+  .informacije_o_meniju {
+    font-family: "HelveticaNeueLTPro Roman Light Extended";
+    color: #0e0e0e;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 38.9px; /* 162.083% */
+    letter-spacing: 0.48px;
+    margin-top: 40px;
+    background-color: rgba(255, 182, 108, 0.4);
+    border-radius: 64px;
+    padding: 64px;
+    display: flex;
+    align-items: flex-start;
+    @media (max-width: 1600px) {
+      flex-direction: column-reverse;
+      gap: 40px;
+    }
+    @media (max-width: 1366px) {
+      font-size: 14px;
+
+      font-weight: 300;
+      line-height: 22px;
+      letter-spacing: 0.28px;
+    }
+    @media (max-width: 1024px) {
+      font-size: 16px;
+
+      line-height: 26px; /* 162.5% */
+      letter-spacing: 0.32px;
+    }
+    @media (max-width: 769px) {
+      display: none;
+    }
+
+    & > div:first-of-type {
+      display: flex;
+      align-items: center;
+      @media (max-width: 2840px) {
+        .domaca_kuhinja_srb,
+        .domaca_kuhinja_eng {
+          width: 182px;
+          height: 80px;
+        }
+        .domaca_kuhinja_ru {
+          width: 182px;
+          height: 80px;
+        }
+        .prirodno_eng {
+          width: 129px;
+          height: 63.5px;
+        }
+        .prirodno_srb,
+        .prirodno_ru {
+          width: 151px;
+          height: 63.5px;
+        }
+        .rucno_ru {
+          width: 258px;
+          height: 52px;
+        }
+        .rucno_srb {
+          width: 258px;
+          height: 68px;
+        }
+        .rucno_eng {
+          width: 210px;
+          height: 68px;
+        }
+      }
+      @media (max-width: 1600px) {
+        .domaca_kuhinja_srb,
+        .domaca_kuhinja_eng {
+          width: 162px;
+          height: 70px;
+        }
+        .domaca_kuhinja_ru {
+          width: 162px;
+          height: 70px;
+        }
+        .prirodno_eng {
+          width: 109px;
+          height: 53.5px;
+        }
+        .prirodno_srb,
+        .prirodno_ru {
+          width: 131px;
+          height: 53.5px;
+        }
+        .rucno_ru {
+          width: 238px;
+          height: 42px;
+        }
+        .rucno_srb {
+          width: 238px;
+          height: 58px;
+        }
+        .rucno_eng {
+          width: 190px;
+          height: 58px;
+        }
+      }
+      @media (max-width: 1440px) {
+        .domaca_kuhinja_srb,
+        .domaca_kuhinja_eng {
+          width: 142px;
+          height: 65px;
+        }
+        .domaca_kuhinja_ru {
+          width: 142px;
+          height: 60px;
+        }
+        .prirodno_eng {
+          width: 89px;
+          height: 43.5px;
+        }
+        .prirodno_srb,
+        .prirodno_ru {
+          width: 111px;
+          height: 43.5px;
+        }
+        .rucno_ru {
+          width: 218px;
+          height: 37px;
+        }
+        .rucno_srb {
+          width: 218px;
+          height: 53px;
+        }
+        .rucno_eng {
+          width: 170px;
+          height: 53px;
+        }
+      }
+      @media (max-width: 1600px) {
+        .domaca_kuhinja_srb,
+        .domaca_kuhinja_eng {
+          width: 162px;
+          height: 70px;
+        }
+        .domaca_kuhinja_ru {
+          width: 162px;
+          height: 70px;
+        }
+        .prirodno_eng {
+          width: 109px;
+          height: 53.5px;
+        }
+        .prirodno_srb,
+        .prirodno_ru {
+          width: 131px;
+          height: 53.5px;
+        }
+        .rucno_ru {
+          width: 238px;
+          height: 42px;
+        }
+        .rucno_srb {
+          width: 238px;
+          height: 58px;
+        }
+        .rucno_eng {
+          width: 190px;
+          height: 58px;
+        }
+      }
+
+      & > img {
+        &:nth-of-type(2) {
+          margin: 0 48px;
+        }
+        &:nth-of-type(4) {
+          margin-left: 19px;
+        }
+      }
+    }
+    & > div:last-of-type {
+      padding-left: 78px;
+      color: #0e0e0e;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 300;
+      line-height: 38.9px;
+      letter-spacing: 0.48px;
+      @media (max-width: 1600px) {
+        font-size: 20px;
+        padding-left: 0;
+      }
+      @media (max-width: 1366px) {
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 22px;
+        letter-spacing: 0.4px;
+      }
+    }
+  }
+  .koji_paket_je_za_mene_wrapper {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    position: relative;
+    @media (max-width: 1024px) {
+      align-items: stretch;
+    }
+    @media (max-width: 769px) {
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .main_content_paket {
+      padding-top: 50px;
+      @media (max-width: 1366px) {
+        width: 100%;
+      }
+      @media (max-width: 769px) {
+        padding-top: 0;
+        .button-wrapper {
+          display: none !important;
+        }
+      }
+    }
+    .main_container_koji_paket_je_za_mene {
+      flex: 0 0 42.5%;
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      position: sticky;
+      top: 25%;
+
+      // @media (max-width: 1500px) {
+      //   top: 11%;
+      // }
+      @media (max-width: 1366px) {
+        flex: 0 0 35.5%;
+      }
+      @media (max-width: 769px) {
+        position: relative;
+        top: 0;
+        flex: auto;
+      }
+
+      h2 {
+        font-family: "HelveticaNeueLTPro Roman Medium Extended";
+        color: #0e0e0e;
+        font-size: 80px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 1.6px;
+        width: 580px;
+        margin-bottom: 73px;
+        @media (max-width: 1600px) {
+          font-size: 64px;
+        }
+        @media (max-width: 1366px) {
+          font-size: 52px;
+          margin-bottom: 43px;
+          width: 100%;
+        }
+        @media (max-width: 1024px) {
+          font-size: 44px;
+          font-weight: 500;
+          letter-spacing: 0.88px;
+          margin-bottom: 23px;
+        }
+        @media (max-width: 769px) {
+          color: #0e0e0e;
+          font-size: 32px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          letter-spacing: 0.64px;
+          margin-bottom: 16px;
+          width: auto;
+        }
+      }
+      .text_content_paket {
+        font-family: "HelveticaNeueLTPro Roman Light Extended";
+        color: #0e0e0e;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 38.88px; /* 162% */
+        letter-spacing: 0.48px;
+        width: 580px;
+        margin-bottom: 24px;
+        @media (max-width: 1600px) {
+          font-size: 20px;
+        }
+
+        @media (max-width: 1366px) {
+          font-size: 16px;
+          line-height: 26px;
+          width: 100%;
+        }
+        @media (max-width: 1024px) {
+          font-size: 16px;
+          line-height: 25.92px;
+          letter-spacing: 0.32px;
+        }
+        @media (max-width: 769px) {
+          color: #0e0e0e;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 300;
+          line-height: 22.68px; /* 162% */
+          letter-spacing: 0.28px;
+          width: auto;
+          margin-bottom: 32px;
+        }
+      }
+      .logo-wrapper {
+        margin-right: -176px;
+      }
+      .button-wrapper {
+        display: flex;
+      }
+    }
+    .paketi_wrapper {
+      flex: 0 0 57.5%;
+      margin-bottom: -50px;
+      @media (max-width: 1600px) {
+        flex: 0 0 50.5%;
+      }
+      @media (max-width: 1366px) {
+        flex: 0 0 57%;
+      }
+      @media (max-width: 769px) {
+        margin-bottom: 0;
+      }
+
+      .responsive_content {
+        display: none;
+        @media (max-width: 769px) {
+          display: flex;
+          flex-direction: column;
+          p {
+            margin: 0;
+          }
+          .button-wrapper {
+            margin-bottom: 44px;
+            width: 100%;
+            .button-main {
+              width: 100%;
+            }
+          }
+          .additional_text {
+            font-family: "HelveticaNeueLTPro Roman Light Extended";
+            strong {
+              font-family: "HelveticaNeueLTPro Roman Regular Extended";
+            }
+            color: #0e0e0e;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 20px; /* 166.667% */
+            letter-spacing: 0.24px;
+          }
+          .svg_wrapper {
+            margin: 32px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+          .menu_info {
+            font-family: "HelveticaNeueLTPro Roman Light Extended";
+            margin-top: 24px;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 19.44px; /* 162% */
+            letter-spacing: 0.24px;
+          }
+        }
+      }
+    }
+    .paketi_text {
+      font-family: "HelveticaNeueLTPro Roman Light Extended";
+      strong {
+        font-family: "HelveticaNeueLTPro Roman Regular Extended";
+      }
+      background-color: rgba(254, 236, 105, 0.4);
+      z-index: -1;
+      position: relative;
+
+      color: #0e0e0e;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 32px; /* 160% */
+      letter-spacing: 0.4px;
+      @media (max-width: 1600px) {
+        font-size: 16px;
+      }
+      @media (max-width: 1366px) {
+        padding: 56px 44px;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 22px;
+        letter-spacing: 0.28px;
+        p:last-of-type {
+          margin-top: 44px;
+        }
+      }
+      @media (max-width: 1024px) {
+        font-size: 14px;
+        line-height: 22.68px;
+        letter-spacing: 0.28px;
+      }
+      @media (max-width: 769px) {
+        display: none;
+      }
+
+      &:first-of-type {
+        border-radius: 64px 64px 0px 0px;
+        translate: 0 50px;
+        padding: 32px 64px 106px;
+        @media (max-width: 1366px) {
+          padding: 64px 44px;
+        }
+        @media (max-width: 1024px) {
+          padding: 52px 34px 112px 34px;
+        }
+      }
+      &:nth-of-type(3) {
+        border-radius: 0 0 64px 64px;
+        padding: 106px 64px 32px;
+        translate: 0 -50px;
+        @media (max-width: 1366px) {
+          padding: 64px 44px;
+        }
+        @media (max-width: 1024px) {
+          padding: 83px 34px 45px 34px;
+        }
+      }
+    }
+    .paketi_container {
+      position: relative;
+      z-index: 11;
+      border-radius: 64px;
+      background: #ffb66c;
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+      padding: 64px;
+      @media (max-width: 1366px) {
+        padding: 64px 44px;
+      }
+      @media (max-width: 1024px) {
+        padding: 52px 34px;
+        gap: 50px;
+      }
+      @media (max-width: 769px) {
+        padding: 0;
+        gap: 0;
+        border-radius: 16px;
+        margin-bottom: 32px;
+      }
+
+      .paket {
+        @media (max-width: 769px) {
+          padding: 16px;
+        }
+
+        h3 {
+          font-family: "HelveticaNeueLTPro Roman Medium Extended";
+          color: #0e0e0e;
+          font-size: 36px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          letter-spacing: 0.72px;
+          margin-bottom: 24px;
+          transition: all 0.3s ease-in-out;
+          position: relative;
+
+          svg {
+            display: none;
+            @media (max-width: 769px) {
+              display: block;
+              position: absolute;
+              right: 0;
+              top: 50%;
+              translate: 0 -50%;
+            }
+          }
+          @media (max-width: 1920px) {
+            font-size: 32px;
+          }
+          @media (max-width: 1600px) {
+            font-size: 28px;
+          }
+          @media (max-width: 1024px) {
+            font-size: 20px;
+
+            letter-spacing: 0.4px;
+          }
+          @media (max-width: 769px) {
+            color: #0e0e0e;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 0.36px;
+            margin: 0;
+            padding-right: 35px;
+          }
+        }
+        &.active {
+          h3 {
+            @media (max-width: 769px) {
+              margin-bottom: 32px;
+            }
+          }
+          svg {
+            rotate: 180deg;
+          }
+        }
+        .text {
+          overflow: hidden;
+
+          transition: height 0.3s ease-in-out;
+          @media (max-width: 769px) {
+            height: 0;
+          }
+        }
+
+        p {
+          font-family: "HelveticaNeueLTPro Roman Light Extended";
+          color: #000;
+          font-size: 24px;
+          font-style: normal;
+          font-weight: 300;
+          line-height: 38px;
+          letter-spacing: 0.48px;
+          @media (max-width: 1600px) {
+            font-size: 20px;
+          }
+          @media (max-width: 1366px) {
+            font-size: 16px;
+
+            line-height: 26px; /* 162.5% */
+            letter-spacing: 0.32px;
+          }
+          @media (max-width: 1024px) {
+            font-size: 16px;
+
+            line-height: 26px; /* 162.5% */
+            letter-spacing: 0.32px;
+          }
+          @media (max-width: 769px) {
+            color: #0e0e0e;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 22.68px; /* 162% */
+            letter-spacing: 0.28px;
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.woocommerce-order-pay {
+    .woocommerce {
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        flex-direction: column;
+        margin: 0 auto;
+        .button-proceed {
+            background-color: black;
+            color: white;
+            transition: 0.3s ease-in-out;
+            font-weight: 400;
+            &:hover {
+                background-color: #feec69;
+                color: black;
+            }
+        }
+
+        .order_details {
+            @media (max-width: 1024px) {
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                margin: 1rem auto;
+                width: 100%;
+            }
+
+            li {
+                @media (max-width: 1024px) {
+                    float: left;
+                    margin-right: 0em;
+                    text-transform: uppercase;
+                    font-size: 0.715em;
+                    line-height: 1;
+                    border-right: 1px transparent;
+                    padding-right: 0em;
+                    margin-left: 0;
+                    padding-left: 0;
+                    list-style-type: none;
+                    margin-bottom: 1rem;
+                }
+            }
+        }
+    }
+}

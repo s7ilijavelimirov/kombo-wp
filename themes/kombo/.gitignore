@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Lock fajlovi (postojeća politika repoa — za produkciju razmotriti commit composer.lock)
+package-lock.json
+composer.lock
+
+# Logs
+*.log
+debug.log
+error_log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# Build output
+dist/
+build/
+
+# Source maps
+*.map
+
+# Secrets / env
+.env
+.env.*
+.env.local
+wp-config.php
+
+# Cache
+.cache/
+cache/
+.parcel-cache/
+*.cache
+.phpunit.result.cache
+
+# Webpack izlaz: pratiti samo .gitkeep u public/css i public/js
+public/css/*
+!public/css/.gitkeep
+public/js/*
+!public/js/.gitkeep

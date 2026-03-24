@@ -1,0 +1,59 @@
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Light Extended";
+  src: url("../fonts/HelveticaNeueLTPro-43 -LightExtended.otf");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Regular";
+  src: url("../fonts/HelveticaNeueLTPro- 55 - Roman.otf");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Regular Extended";
+  src: url("../fonts/HelveticaNeueLTPro-53 -Extended.otf");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Medium";
+  src: url("../fonts/HelveticaNeueLTPro-65 - Medium.otf");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Medium Extended";
+  src: url("../fonts/HelveticaNeueLTPro-63 - MedumExtended.otf");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Bold";
+  src: url("../fonts/HelveticaNeueLTPro 75-Bold.otf");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLTPro Roman Heavy";
+  src: url("../fonts/Helvetica Neue LT Pro 85 Heavy.otf");
+}
+
+/* Default font family for the body */
+body,
+button,
+form {
+  font-family: "HelveticaNeueLTPro Roman Regular";
+}
+
+.ui-datepicker {
+  font-family: "HelveticaNeueLTPro Roman Regular" !important;
+}
+
+html[lang="ru-RU"] * {
+  font-family: "sans-serif", sans-serif !important;
+  .front_page_hero_section {
+    .main_title {
+      h1 {
+        font-family: "HelveticaNeueLTPro Roman Heavy" !important;
+      }
+    }
+  }
+  strong {
+    font-weight: 600 !important;
+  }
+}

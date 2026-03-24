@@ -1,0 +1,167 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/aos/src/sass/aos.scss";
+// @import "../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+
+@import "fonts";
+@import "navigation";
+@import "front-page";
+@import "woocommerce";
+@import "./buttons";
+@import "./footer";
+//! Templates
+@import "./templates/front_page_hero_section";
+@import "./templates/side_main_menu";
+@import "./templates/kako_kupiti";
+@import "./templates/koji_paket_je_za_mene";
+@import "./templates/nas_packaging";
+@import "./templates/primeri_jela";
+@import "./templates/faq";
+@import "./meal-plan-form";
+@import "./templates/calendar";
+@import "./templates/insta_feed";
+@import "./templates/price-list";
+@import "./templates/zasto-kombo";
+@import "./templates/cart";
+@import "./templates/checkout";
+@import "./templates/order_received";
+@import "./templates/empty_cart";
+@import "./templates/404";
+@import "./templates/view-order";
+@import "./templates/order-pay";
+@import "./templates/politika_privatnosti";
+* {
+  box-sizing: border-box;
+}
+body {
+  box-sizing: border-box;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+
+section {
+  @media (max-width: 1024px) {
+    overflow: hidden;
+  }
+  @media (max-width: 600px) {
+    overflow: hidden;
+  }
+}
+
+body.home {
+  .button-main {
+    @media (max-width: 1024px) {
+      height: 39px !important;
+    }
+  }
+}
+
+body.menu-opened,
+body.menu-open {
+  overflow: hidden;
+}
+
+body.menu-open .content-body {
+  z-index: 99999;
+}
+
+body.menu-open .trigger-side-menu {
+  z-index: 999999;
+}
+
+body.page-template-price-list {
+  #desktop-nav {
+    background: transparent;
+  }
+}
+
+.meal-plan-price-wrapper {
+  font-family: "HelveticaNeueLTPro Roman Regular Extended";
+  color: #0e0e0e;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.8px;
+  margin-bottom: 40px;
+  display: none;
+  @media (max-width: 1024px) {
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.56px;
+  }
+}
+
+.form-buttons {
+  gap: 32px;
+  button {
+    display: flex;
+    width: 378px;
+    height: 57px;
+    font-family: "HelveticaNeueLTPro Roman Regular Extended";
+    @media (max-width: 1024px) {
+      height: 47px;
+    }
+
+    &.cart-btn {
+      background-color: #e4e4e4;
+      color: #0e0e0e;
+      border: none;
+      &:hover {
+        svg {
+          fill: #0e0e0e;
+        }
+      }
+    }
+    @media (max-width: 1024px) {
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 130%;
+      letter-spacing: 0.32px;
+    }
+  }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 30px;
+  }
+}
+
+//! CHECKOUT PAGE LOGO BANKE
+.price-info {
+  .bank-logo-wrapper {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    img {
+      height: 37px;
+    }
+  }
+}
+
+.override-class {
+  @media (max-width: 1024px) {
+    width: 100% !important;
+  }
+}
+.expand-class {
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+  .active {
+    background: #feec69 !important;
+  }
+}

@@ -1,0 +1,261 @@
+.kako_kupiti_section {
+  background: #8dcddd;
+  padding: 280px 56px 0 56px;
+  @media (max-width: 1600px) {
+    padding: 220px 56px 0 56px;
+  }
+  @media (max-width: 1366px) {
+    padding: 164px 32px 108px 32px;
+  }
+  p {
+    margin: 0;
+  }
+  @media (max-width: 1024px) {
+    padding: 131px 32px 55px;
+  }
+  @media (max-width: 769px) {
+    padding: 88px 60px 40px;
+  }
+  @media (max-width: 600px) {
+    padding: 88px 16px 40px;
+  }
+  h2 {
+    font-family: "HelveticaNeueLTPro Roman Medium Extended";
+    color: #0e0e0e;
+    font-size: 80px;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.6px;
+    margin-bottom: 68px;
+    @media (max-width: 1600px) {
+      font-size: 64px;
+    }
+    @media (max-width: 1366px) {
+      font-size: 52px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 1024px) {
+      font-size: 44px;
+      font-weight: 500;
+      letter-spacing: 0.88px;
+      margin-bottom: 38px;
+    }
+    @media (max-width: 769px) {
+      color: #0e0e0e;
+      font-size: 32px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0.64px;
+      margin-bottom: 68px;
+    }
+  }
+  .cards_container {
+    display: flex;
+    // align-items: center;
+    justify-content: space-between;
+    min-height: 410px;
+    @media (max-width: 1366px) {
+      min-height: 210px;
+    }
+    @media (max-width: 1024px) {
+      min-height: 210px;
+      gap: 16px;
+    }
+    @media (max-width: 769px) {
+      flex-direction: column;
+      min-height: 410px;
+    }
+
+    .card_kako_kupiti {
+      flex: 1;
+      position: relative;
+      @media (max-width: 769px) {
+        margin-bottom: 34px;
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+
+      .background_number {
+        font-family: "HelveticaNeueLTPro Roman Regular Extended";
+        position: absolute;
+        right: 20px;
+        bottom: -160px;
+        color: rgba(253, 253, 253, 0.35);
+        text-align: right;
+        font-size: 360px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+        z-index: 0;
+        @media (max-width: 1600px) {
+          font-size: 320px;
+          bottom: -150px;
+        }
+        @media (max-width: 1366px) {
+          font-size: 260px;
+          bottom: -220px;
+        }
+        @media (max-width: 1024px) {
+          font-size: 207.594px;
+          bottom: -160px;
+          font-weight: 400;
+
+          letter-spacing: 4.152px;
+        }
+        @media (max-width: 769px) {
+          color: rgba(253, 253, 253, 0.35);
+          font-size: 100px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          letter-spacing: 2px;
+          bottom: auto;
+          top: -20px;
+          right: -16px;
+        }
+      }
+      h5 {
+        font-family: "HelveticaNeueLTPro Roman Medium Extended";
+        color: #0e0e0e;
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.72px;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 24px;
+        @media (max-width: 1921px) {
+          font-size: 32px;
+          padding-right: 85px;
+        }
+        @media (max-width: 1600px) {
+          font-size: 28px;
+          padding-right: 0px;
+        }
+        @media (max-width: 1366px) {
+          font-size: 22px;
+        }
+        @media (max-width: 1024px) {
+          margin-bottom: 19px;
+          color: #0e0e0e;
+          font-size: 20px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          letter-spacing: 0.44px;
+        }
+        @media (max-width: 769px) {
+          margin-bottom: 12px;
+          color: #0e0e0e;
+          font-size: 22px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          letter-spacing: 0.44px;
+        }
+      }
+      p {
+        font-family: "HelveticaNeueLTPro Roman Light Extended";
+        color: #0e0e0e;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 130%; /* 31.2px */
+        letter-spacing: 0.48px;
+        strong {
+          font-family: "HelveticaNeueLTPro Roman Regular Extended";
+        }
+
+        @media (max-width: 1600px) {
+          font-size: 20px;
+
+          letter-spacing: 0.4px;
+        }
+        @media (max-width: 1366px) {
+          font-size: 16px;
+          letter-spacing: 0.32px;
+        }
+        @media (max-width: 1024px) {
+          color: #0e0e0e;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 300;
+          line-height: 130%; /* 20.8px */
+          letter-spacing: 0.32px;
+        }
+        @media (max-width: 769px) {
+          color: #0e0e0e;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 300;
+          line-height: 23px; /* 164.286% */
+          letter-spacing: 0.28px;
+        }
+      }
+      .text_content_card {
+        position: relative;
+        z-index: 2;
+        color: #0e0e0e;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 130%; /* 31.2px */
+        letter-spacing: 0.47x;
+        padding-right: 85px;
+        @media (max-width: 1600px) {
+          font-size: 20px;
+        }
+        @media (max-width: 1366px) {
+          font-size: 16px;
+        }
+        @media (max-width: 1024px) {
+          font-size: 16px;
+          padding-right: 0;
+        }
+        @media (max-width: 769px) {
+          padding-right: 0;
+          font-size: 20px;
+        }
+
+        .card-additional-text {
+          margin-top: 24px;
+          position: relative;
+          @media (max-width: 1600px) {
+            font-size: 20px;
+          }
+          @media (max-width: 1024px) {
+            margin-top: 12px;
+          }
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: -20px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: rgba(254, 236, 105, 1);
+            border: 2px solid #000;
+          }
+          @media (max-width: 1024px) {
+            translate: 16px;
+            &::before {
+              width: 10px;
+              height: 10px;
+              border-width: 1px;
+              left: -16px;
+            }
+          }
+        }
+        strong {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
