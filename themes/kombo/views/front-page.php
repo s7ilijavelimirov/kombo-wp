@@ -18,7 +18,7 @@
                             $slide_image = get_sub_field('slide'); ?>
                             <?php if ($slide_image): ?>
                                 <div class="slide slide-desktop">
-                                    <img src="<?php echo $slide_image['url']; ?>" alt="<?php echo bloginfo() ?> - Slider img">
+                                    <img src="<?php echo esc_url( $slide_image['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Slider img' ); ?>">
                                 </div>
                             <?php endif; ?>
                         <?php endwhile ?>
@@ -30,7 +30,7 @@
                             $slide_image_mobile = get_sub_field('slide_image_mobile') ?>
                             <?php if ($slide_image_mobile) : ?>
                                 <div class="slide slide-mobile">
-                                    <img src="<?php echo $slide_image_mobile['url']; ?>" alt="<?php echo bloginfo() ?> - Slider img">
+                                    <img src="<?php echo esc_url( $slide_image_mobile['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Slider img' ); ?>">
                                 </div>
                             <?php endif; ?>
                         <?php endwhile ?>
@@ -43,20 +43,20 @@
                         $text_content = get_sub_field('text_content'); ?>
                         <div class="text_content_container">
                             <?php if ($title): ?>
-                                <div class="main_title"><?php echo $title ?></div>
+                                <div class="main_title"><?php echo wp_kses_post( $title ); ?></div>
                             <?php endif ?>
                             <?php if ($text_content): ?>
                                 <div class="hero_section_text_container">
-                                    <?php echo $text_content ?>
+                                    <?php echo wp_kses_post( $text_content ); ?>
                                     <div class="button-wrapper">
                                         <a href="<?php
                                                     $current_language = pll_current_language();
                                                     if ($current_language === 'sr') {
-                                                        echo get_site_url() . '/porucivanje';
+                                                        echo esc_url( get_site_url() . '/porucivanje' );
                                                     } elseif ($current_language === 'en') {
-                                                        echo get_site_url() . '/en/ordering';
+                                                        echo esc_url( get_site_url() . '/en/ordering' );
                                                     } elseif ($current_language === 'ru') {
-                                                        echo get_site_url() . '/ru/заказ';
+                                                        echo esc_url( get_site_url() . '/ru/заказ' );
                                                     }
                                                     ?>"
                                             class="button-main">
@@ -64,9 +64,9 @@
                                                 <?php
                                                 $current_language = pll_current_language();
                                                 if ($current_language === 'ru') {
-                                                    echo 'Заказ';
+                                                    echo esc_html( 'Заказ' );
                                                 } else {
-                                                    echo pll__('Naruči');
+                                                    echo esc_html( pll__( 'Naruči' ) );
                                                 }
                                                 ?>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 16 16" fill="#fff" class="bi bi-arrow-right-short">
@@ -83,11 +83,11 @@
                                     href="<?php
                                             $current_language = pll_current_language();
                                             if ($current_language === 'sr') {
-                                                echo get_site_url() .  '/porucivanje';
+                                                echo esc_url( get_site_url() . '/porucivanje' );
                                             } elseif ($current_language === 'en') {
-                                                echo get_site_url() .  '/en/ordering';
+                                                echo esc_url( get_site_url() . '/en/ordering' );
                                             } elseif ($current_language === 'ru') {
-                                                echo get_site_url() . '/ru/заказ';
+                                                echo esc_url( get_site_url() . '/ru/заказ' );
                                             }
                                             ?>"
                                     class="button-main">
@@ -95,9 +95,9 @@
                                         <?php
                                         $current_language = pll_current_language();
                                         if ($current_language === 'ru') {
-                                            echo 'Заказ';
+                                            echo esc_html( 'Заказ' );
                                         } else {
-                                            echo pll__('Naruči');
+                                            echo esc_html( pll__( 'Naruči' ) );
                                         }
                                         ?>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 16 16" fill="#fff" class="bi bi-arrow-right-short">
@@ -124,7 +124,7 @@
         $title = get_sub_field('title'); ?>
         <section class="container-fluid kako_kupiti_section">
             <?php if ($title): ?>
-                <h2><?php echo $title ?></h2>
+                <h2><?php echo esc_html( $title ); ?></h2>
             <?php endif; ?>
             <div class="cards_container">
                 <?php if (have_rows('kako_kupiti_cards')): ?>
@@ -136,16 +136,16 @@
                         $background_number = get_sub_field('background_number'); ?>
                         <div class="card_kako_kupiti">
                             <?php if ($background_number): ?>
-                                <div class="background_number"><?php echo $background_number ?></div>
+                                <div class="background_number"><?php echo esc_html( $background_number ); ?></div>
                             <?php endif; ?>
                             <?php if ($title_card): ?>
-                                <h5><?php echo $title_card ?></h5>
+                                <h5><?php echo esc_html( $title_card ); ?></h5>
                                 <?php if ($text_content_card): ?>
                                     <div class="text_content_card">
-                                        <?php echo $text_content_card; ?>
+                                        <?php echo wp_kses_post( $text_content_card ); ?>
                                         <?php if ($text_additional_card): ?>
                                             <div class="card-additional-text">
-                                                <?php echo $text_additional_card; ?>
+                                                <?php echo wp_kses_post( $text_additional_card ); ?>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -175,23 +175,23 @@
                 <div class="main_container_koji_paket_je_za_mene">
                     <div class="main_content_paket">
                         <?php if ($title): ?>
-                            <h2><?php echo $title ?></h2>
+                            <h2><?php echo esc_html( $title ); ?></h2>
                         <?php endif; ?>
                         <?php if ($text_content_paket): ?>
                             <div class="text_content_paket">
-                                <?php echo $text_content_paket; ?>
+                                <?php echo wp_kses_post( $text_content_paket ); ?>
                             </div>
                         <?php endif; ?>
                         <?php if ($link): ?>
                             <div class="button-wrapper">
-                                <a href="<?php echo $link['url'] ?>"
+                                <a href="<?php echo esc_url( $link['url'] ); ?>"
                                     class="button-main"><span>
                                         <?php
                                         $current_language = pll_current_language();
                                         if ($current_language === 'ru') {
-                                            echo 'Закажи свой пакет';
+                                            echo esc_html( 'Закажи свой пакет' );
                                         } else {
-                                            echo pll__('Naruči svoj paket');
+                                            echo esc_html( pll__( 'Naruči svoj paket' ) );
                                         }
                                         ?>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 16 16"
@@ -210,7 +210,7 @@
                 </div>
                 <div class="paketi_wrapper">
                     <?php if ($paketi_text_iznad): ?>
-                        <div class="paketi_text"><?php echo $paketi_text_iznad; ?></div>
+                        <div class="paketi_text"><?php echo wp_kses_post( $paketi_text_iznad ); ?></div>
                     <?php endif; ?>
                     <div class="paketi_container">
                         <?php if (have_rows('paket')): ?>
@@ -220,7 +220,7 @@
                                 $text_paket = get_sub_field('text_paket'); ?>
                                 <div class="paket">
                                     <?php if ($title): ?>
-                                        <h3><?php echo $title ?>
+                                        <h3><?php echo esc_html( $title ); ?>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
                                                 <path d="M8.57576 0V14M8.57576 14L1 6.74112M8.57576 14L16 6.74112" stroke="#0E0E0E"
                                                     stroke-width="2" />
@@ -229,7 +229,7 @@
                                     <?php endif; ?>
                                     <div class="text">
                                         <?php if ($text_paket): ?>
-                                            <?php echo $text_paket ?>
+                                            <?php echo wp_kses_post( $text_paket ); ?>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -237,13 +237,13 @@
                         <?php endif; ?>
                     </div>
                     <?php if ($paketi_text_ispod): ?>
-                        <div class="paketi_text"><?php echo $paketi_text_ispod; ?></div>
+                        <div class="paketi_text"><?php echo wp_kses_post( $paketi_text_ispod ); ?></div>
                     <?php endif; ?>
                     <div class="responsive_content">
                         <?php if ($link) : ?>
                             <div class="button-wrapper">
-                                <a href="<?php echo $link['url']; ?>" class="button-main">
-                                    <span><?php echo pll__('Naruči svoj paket') ?><svg
+                                <a href="<?php echo esc_url( $link['url'] ); ?>" class="button-main">
+                                    <span><?php echo esc_html( pll__( 'Naruči svoj paket' ) ); ?><svg
                                             xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 16 16"
                                             fill="#fff" class="bi bi-arrow-right-short">
                                             <path fill-rule="evenodd"
@@ -253,7 +253,7 @@
                             </div>
                         <?php endif; ?>
                         <?php if ($paketi_text_iznad): ?>
-                            <div class="additional_text"><?php echo $paketi_text_iznad; ?></div>
+                            <div class="additional_text"><?php echo wp_kses_post( $paketi_text_iznad ); ?></div>
                         <?php endif; ?>
 
 
@@ -635,10 +635,10 @@
                         <?php }
                         } ?>
                         <?php if ($paketi_text_ispod): ?>
-                            <div class="additional_text"><?php echo $paketi_text_ispod; ?></div>
+                            <div class="additional_text"><?php echo wp_kses_post( $paketi_text_ispod ); ?></div>
                         <?php endif; ?>
                         <div class="menu_info">
-                            <?php echo $informacije_o_meniju; ?>
+                            <?php echo wp_kses_post( $informacije_o_meniju ); ?>
                         </div>
                     </div>
                 </div>
@@ -656,9 +656,9 @@
                                 $prirodno_srb = get_template_directory_uri() . '/src/assets/images/prirodno_srb.png';
                                 $rucno_srb = get_template_directory_uri() . '/src/assets/images/rucno_srb.png';
                                 ?>
-                                <img src="<?php echo $domaca_kuhinja_srb ?>" alt="<?php echo bloginfo() ?> - Domaća kuhinja logo" class="png-logo domaca_kuhinja_srb">
-                                <img src="<?php echo $prirodno_srb ?>" alt="<?php echo bloginfo() ?> - Prirodni sastojci logo" class="png-logo prirodno_srb">
-                                <img src="<?php echo $rucno_srb ?>" alt="<?php echo bloginfo() ?> - Ručno pravljeno -logo" class="png-logo rucno_srb">
+                                <img src="<?php echo esc_url( $domaca_kuhinja_srb ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Domaća kuhinja logo' ); ?>" class="png-logo domaca_kuhinja_srb">
+                                <img src="<?php echo esc_url( $prirodno_srb ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Prirodni sastojci logo' ); ?>" class="png-logo prirodno_srb">
+                                <img src="<?php echo esc_url( $rucno_srb ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Ručno pravljeno -logo' ); ?>" class="png-logo rucno_srb">
 
                             </div>
                         <?php } elseif ($current_language == 'en') { ?>
@@ -668,9 +668,9 @@
                                 $prirodno_eng = get_template_directory_uri() . '/src/assets/images/prirodno_eng.png';
                                 $rucno_eng = get_template_directory_uri() . '/src/assets/images/rucno_eng.png';
                                 ?>
-                                <img src="<?php echo $domaca_kuhinja_eng ?>" alt="<?php echo bloginfo() ?> - Homemade ingredients logo" class="png-logo domaca_kuhinja_eng">
-                                <img src="<?php echo $prirodno_eng ?>" alt="<?php echo bloginfo() ?> - 100% natural logo" class="png-logo prirodno_eng">
-                                <img src="<?php echo $rucno_eng ?>" alt="<?php echo bloginfo() ?> - Handmade logo" class="png-logo rucno_eng">
+                                <img src="<?php echo esc_url( $domaca_kuhinja_eng ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Homemade ingredients logo' ); ?>" class="png-logo domaca_kuhinja_eng">
+                                <img src="<?php echo esc_url( $prirodno_eng ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - 100% natural logo' ); ?>" class="png-logo prirodno_eng">
+                                <img src="<?php echo esc_url( $rucno_eng ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Handmade logo' ); ?>" class="png-logo rucno_eng">
 
                             </div>
                         <?php } elseif ($current_language == 'ru') { ?>
@@ -680,9 +680,9 @@
                                 $prirodno_ru = get_template_directory_uri() . '/src/assets/images/prirodno_ru.png';
                                 $rucno_ru = get_template_directory_uri() . '/src/assets/images/rucno_ru.png';
                                 ?>
-                                <img src="<?php echo $domaca_kuhinja_ru ?>" alt="<?php echo bloginfo() ?> - домашняя кухня лого" class="png-logo domaca_kuhinja_ru">
-                                <img src="<?php echo $prirodno_ru ?>" alt="<?php echo bloginfo() ?> - 100% натуральный лого" class="png-logo prirodno_ru">
-                                <img src="<?php echo $rucno_ru ?>" alt="<?php echo bloginfo() ?> - ручной работы лого" class="png-logo rucno_ru">
+                                <img src="<?php echo esc_url( $domaca_kuhinja_ru ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - домашняя кухня лого' ); ?>" class="png-logo domaca_kuhinja_ru">
+                                <img src="<?php echo esc_url( $prirodno_ru ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - 100% натуральный лого' ); ?>" class="png-logo prirodno_ru">
+                                <img src="<?php echo esc_url( $rucno_ru ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - ручной работы лого' ); ?>" class="png-logo rucno_ru">
 
                             </div>
                         <?php } else { ?>
@@ -692,16 +692,16 @@
                                 $prirodno_srb = get_template_directory_uri() . '/src/assets/images/prirodno_srb.png';
                                 $rucno_srb = get_template_directory_uri() . '/src/assets/images/rucno_srb.png';
                                 ?>
-                                <img src="<?php echo $domaca_kuhinja_srb ?>" alt="<?php echo bloginfo() ?> - Domaća kuhinja logo" class="png-logo">
-                                <img src="<?php echo $prirodno_srb ?>" alt="<?php echo bloginfo() ?> - Prirodni sastojci logo" class="png-logo">
-                                <img src="<?php echo $rucno_srb ?>" alt="<?php echo bloginfo() ?> - Ručno pravljeno -logo" class="png-logo">
+                                <img src="<?php echo esc_url( $domaca_kuhinja_srb ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Domaća kuhinja logo' ); ?>" class="png-logo">
+                                <img src="<?php echo esc_url( $prirodno_srb ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Prirodni sastojci logo' ); ?>" class="png-logo">
+                                <img src="<?php echo esc_url( $rucno_srb ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Ručno pravljeno -logo' ); ?>" class="png-logo">
 
                             </div>
                     <?php }
                     } ?>
 
                     <div>
-                        <?php echo $informacije_o_meniju; ?>
+                        <?php echo wp_kses_post( $informacije_o_meniju ); ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -715,18 +715,18 @@ $link_zasto = get_field('link_zasto');
     <div>
         <div>
             <h2>
-                <?php echo $naslov_zasto; ?>
+                <?php echo wp_kses_post( $naslov_zasto ); ?>
             </h2>
             <?php if ($link_zasto): ?>
                 <div class="button-wrapper">
-                    <a href="<?php echo $link_zasto['url'] ?>"
+                    <a href="<?php echo esc_url( $link_zasto['url'] ); ?>"
                         class="button-main"><span>
                             <?php
                             $current_language = pll_current_language();
                             if ($current_language === 'ru') {
-                                echo 'Закажи свой пакет';
+                                echo esc_html( 'Закажи свой пакет' );
                             } else {
-                                echo pll__('Naruči svoj paket');
+                                echo esc_html( pll__( 'Naruči svoj paket' ) );
                             }
                             ?>
                             <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 16 16"
@@ -814,10 +814,10 @@ $link_zasto = get_field('link_zasto');
                 $tekst_tekst_zasto = get_sub_field('tekst_tekst_zasto'); ?>
                 <div class="zasto_item">
                     <?php if ($naslov_tekst_zasto): ?>
-                        <h3><?php echo $naslov_tekst_zasto ?></h3>
+                        <h3><?php echo esc_html( $naslov_tekst_zasto ); ?></h3>
                     <?php endif; ?>
                     <?php if ($tekst_tekst_zasto): ?>
-                        <?php echo $tekst_tekst_zasto ?>
+                        <?php echo wp_kses_post( $tekst_tekst_zasto ); ?>
                     <?php endif; ?>
                 </div>
             <?php endwhile ?>
@@ -825,7 +825,7 @@ $link_zasto = get_field('link_zasto');
     </div>
     <?php if ($link_zasto) : ?>
         <div class="button-wrapper responsive">
-            <a href="<?php echo $link_zasto['url'] ?>" class="button-main"><span><?php echo pll__('Naruči svoj paket') ?>
+            <a href="<?php echo esc_url( $link_zasto['url'] ); ?>" class="button-main"><span><?php echo esc_html( pll__( 'Naruči svoj paket' ) ); ?>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 16 16" fill="#fff"
                         class="bi bi-arrow-right-short">
                         <path fill-rule="evenodd"
@@ -850,7 +850,7 @@ $link_zasto = get_field('link_zasto');
                         the_row();
                         $slika_slider = get_sub_field('slika_slider'); ?>
                         <?php if ($slika_slider): ?>
-                            <img src="<?php echo $slika_slider['url']; ?>" alt="<?php echo bloginfo() ?> - Slider img">
+                            <img src="<?php echo esc_url( $slika_slider['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Slider img' ); ?>">
                         <?php endif; ?>
                     <?php endwhile ?>
                 <?php endif; ?>
@@ -858,14 +858,14 @@ $link_zasto = get_field('link_zasto');
             <div class="content_primeri_jela">
                 <div class="progress_bar"></div>
                 <?php if ($mali_naslov): ?>
-                    <h5><?php echo $mali_naslov ?></h5>
+                    <h5><?php echo esc_html( $mali_naslov ); ?></h5>
                 <?php endif; ?>
                 <?php if ($veliki_naslov): ?>
-                    <h2><?php echo $veliki_naslov ?></h2>
+                    <h2><?php echo esc_html( $veliki_naslov ); ?></h2>
                 <?php endif; ?>
                 <?php if ($text_primeri_jela): ?>
                     <div class="text_primeri_jela">
-                        <?php echo $text_primeri_jela ?>
+                        <?php echo wp_kses_post( $text_primeri_jela ); ?>
                     </div>
                 <?php endif; ?>
                 <div class="slider_button_wrapper">
@@ -912,19 +912,19 @@ $link_zasto = get_field('link_zasto');
         <section class="nas_packaging">
             <?php if ($image_packaging): ?>
                 <div class="image_section_packaging">
-                    <img src="<?php echo $image_packaging['url'] ?>" alt="<?php echo bloginfo() ?> - Packaging img">
+                    <img src="<?php echo esc_url( $image_packaging['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Packaging img' ); ?>">
                 </div>
             <?php endif; ?>
             <div class="text_section_packaging">
                 <?php if ($mali_naslov): ?>
-                    <h5><?php echo $mali_naslov ?></h5>
+                    <h5><?php echo esc_html( $mali_naslov ); ?></h5>
                 <?php endif; ?>
                 <?php if ($veliki_naslov): ?>
-                    <h2><?php echo $veliki_naslov ?></h2>
+                    <h2><?php echo esc_html( $veliki_naslov ); ?></h2>
                 <?php endif; ?>
                 <?php if ($text_packaging): ?>
                     <div class="text_packaging">
-                        <?php echo $text_packaging ?>
+                        <?php echo wp_kses_post( $text_packaging ); ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -939,7 +939,7 @@ $link_zasto = get_field('link_zasto');
         $title = get_sub_field('title'); ?>
         <section class="container-fluid faq">
             <?php if ($title): ?>
-                <h2><?php echo $title ?></h2>
+                <h2><?php echo esc_html( $title ); ?></h2>
             <?php endif; ?>
             <div class="faq_wrapper responsive">
                 <?php if (have_rows('faq_card')): ?>
@@ -949,14 +949,14 @@ $link_zasto = get_field('link_zasto');
                         $faq_content = get_sub_field('faq_content'); ?>
                         <div class="faq_card">
                             <?php if ($faq_title): ?>
-                                <h5><?php echo $faq_title ?> <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 41" fill="none">
+                                <h5><?php echo esc_html( $faq_title ); ?> <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 41" fill="none">
                                             <path d="M21.697 0.5L21.697 38.5M21.697 38.5L2 18.7973M21.697 38.5L41 18.7973" stroke="#0E0E0E"
                                                 stroke-width="3" />
                                         </svg></span></h5>
                             <?php endif; ?>
                             <?php if ($faq_content): ?>
                                 <div class="faq_paragraph">
-                                    <?php echo $faq_content ?>
+                                    <?php echo wp_kses_post( $faq_content ); ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -979,7 +979,7 @@ $link_zasto = get_field('link_zasto');
                                 <div class="faq_card">
                                     <?php if ($faq_title): ?>
                                         <h5>
-                                            <?php echo $faq_title ?>
+                                            <?php echo esc_html( $faq_title ); ?>
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 41" fill="none">
                                                     <path d="M21.697 0.5L21.697 38.5M21.697 38.5L2 18.7973M21.697 38.5L41 18.7973"
@@ -990,7 +990,7 @@ $link_zasto = get_field('link_zasto');
                                     <?php endif; ?>
                                     <?php if ($faq_content): ?>
                                         <div class="faq_paragraph">
-                                            <?php echo $faq_content ?>
+                                            <?php echo wp_kses_post( $faq_content ); ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -1015,7 +1015,7 @@ $link_zasto = get_field('link_zasto');
                                 <div class="faq_card">
                                     <?php if ($faq_title): ?>
                                         <h5>
-                                            <?php echo $faq_title ?>
+                                            <?php echo esc_html( $faq_title ); ?>
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 41" fill="none">
                                                     <path d="M21.697 0.5L21.697 38.5M21.697 38.5L2 18.7973M21.697 38.5L41 18.7973"
@@ -1026,7 +1026,7 @@ $link_zasto = get_field('link_zasto');
                                     <?php endif; ?>
                                     <?php if ($faq_content): ?>
                                         <div class="faq_paragraph">
-                                            <?php echo $faq_content ?>
+                                            <?php echo wp_kses_post( $faq_content ); ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -1049,7 +1049,7 @@ $link_zasto = get_field('link_zasto');
     <?php while (have_rows('slider_front_page')): the_row(); ?>
         <section class="container-fluid instagram-feed">
             <div class="title-and-arrows">
-                <h2><?php echo pll__('Najnovije') ?></h2>
+                <h2><?php echo esc_html( pll__( 'Najnovije' ) ); ?></h2>
                 <div class="slider-navigation">
                     <button class="prev-arrow">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 43" fill="none">
@@ -1072,10 +1072,10 @@ $link_zasto = get_field('link_zasto');
                         $img = get_sub_field('slide_image');
                         $insta_link = get_sub_field('insta_link');
                     ?>
-                        <a href="<?php echo $insta_link['url']; ?>" target="_blank">
+                        <a href="<?php echo esc_url( $insta_link['url'] ); ?>" target="_blank">
                             <div class="slide-insta-feed">
                                 <?php if ($img): ?>
-                                    <img src="<?php echo $img['url'] ?>" alt="<?php echo bloginfo() ?> - Instagram img">
+                                    <img src="<?php echo esc_url( $img['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Instagram img' ); ?>">
                                 <?php endif; ?>
                                 <div class="custom-arrow-insta">
                                     <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1437,15 +1437,15 @@ $link_zasto = get_field('link_zasto');
         // Initialize the slider
         initializeSlider();
 
-        // Update slidesToShow on window resize
-        $(window).resize(updateSlidesToShow);
+        // Update slidesToShow on window resize (use .on() — .resize() shorthand is deprecated in jQuery Migrate 3.x)
+        $(window).on('resize', updateSlidesToShow);
 
-        // Custom arrows
-        $('.prev-arrow').click(function() {
+        // Custom arrows (use .on('click') — .click(fn) shorthand is deprecated in jQuery Migrate 3.x)
+        $('.prev-arrow').on('click', function() {
             $slider.slick('slickPrev');
         });
 
-        $('.next-arrow').click(function() {
+        $('.next-arrow').on('click', function() {
             $slider.slick('slickNext');
         });
     });

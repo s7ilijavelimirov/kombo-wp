@@ -1,4 +1,6 @@
 <?php
+// PITATI IGORA STA JE OVO ? ! oO
+
 get_header(); // Učitaj header.php
 echo '<p>INDEX PAGE</p>';
 if ( have_posts() ) :

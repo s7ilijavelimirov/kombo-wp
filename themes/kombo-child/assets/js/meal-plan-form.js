@@ -1,4 +1,16 @@
 jQuery(document).ready(function ($) {
+  function mpTrace() {
+    if (typeof meal_plan_vars !== "undefined" && meal_plan_vars.trace) {
+      console.log.apply(console, ["[meal-plan]"].concat([].slice.call(arguments)));
+    }
+  }
+
+  function mpPllLang() {
+    return typeof meal_plan_vars !== "undefined" && meal_plan_vars.pll_lang
+      ? meal_plan_vars.pll_lang
+      : "";
+  }
+
   // Form state
   class MealPlanState {
     constructor() {
@@ -58,15 +70,7 @@ jQuery(document).ready(function ($) {
       this.initButtonValidation();
     }
     initButtonValidation() {
-      // Dodajemo click handler na oba dugmeta
-      $(".submit-button.add-to-cart, .buy-now").on("click", (e) => {
-        // Proveravamo da li su datumi odabrani
-        if (!this.state.dates || this.state.dates.length === 0) {
-          e.preventDefault();
-          alert(mealTranslations.fillAllFields);
-          return false;
-        }
-      });
+      // Validacija je u delegated click handlerima + addToCart (izbegavamo duplirane listenere).
     }
 
     updateArrowPosition(step) {
@@ -137,7 +141,9 @@ jQuery(document).ready(function ($) {
       $(".submit-button.add-to-cart")
         .text(mealTranslations.addToCart)
         .prop("disabled", true);
-      $(".buy-now").text(mealTranslations.buyNow).prop("disabled", true);
+      $(".submit-button.buy-now")
+        .text(mealTranslations.buyNow)
+        .prop("disabled", true);
 
       // Reset calories buttons
       $(".calories-buttons .form-button")
@@ -384,19 +390,20 @@ jQuery(document).ready(function ($) {
         );
       }
 
-      // Zadržavamo postojeće handlere
       $("#mealPlanForm").on("submit", (e) => {
         e.preventDefault();
-        if (this.validateForm()) {
-          this.addToCart();
-        }
       });
 
-      $(".buy-now").on("click", (e) => {
+      $(document).on("click", ".submit-button.add-to-cart", (e) => {
         e.preventDefault();
-        if (this.validateForm()) {
-          this.addToCart(true);
-        }
+        mpTrace("click_add_to_cart");
+        this.submitMealPlanToWooCommerce(false);
+      });
+
+      $(document).on("click", ".submit-button.buy-now", (e) => {
+        e.preventDefault();
+        mpTrace("click_buy_now");
+        this.submitMealPlanToWooCommerce(true);
       });
     }
 
@@ -459,6 +466,7 @@ jQuery(document).ready(function ($) {
           data: {
             action: "get_meal_plan_price",
             nonce: meal_plan_vars.nonce,
+            pll_lang: mpPllLang(),
             menu_type: this.state.menuType,
             gender: this.state.gender,
             calories: this.state.calories,
@@ -659,6 +667,7 @@ jQuery(document).ready(function ($) {
         data: {
           action: "get_meal_plan_price",
           nonce: meal_plan_vars.nonce,
+          pll_lang: mpPllLang(),
           menu_type: this.state.menuType,
           gender: this.state.gender,
           calories: this.state.calories,
@@ -674,19 +683,66 @@ jQuery(document).ready(function ($) {
         },
       });
     }
-    async addToCart(buyNow = false) {
-      console.log("Form validation state:", this.validateForm());
-      console.log("Current state:", this.state);
+    /**
+     * WooCommerce kao na single product: pun POST na istu stranicu, pa server radi
+     * wp_safe_redirect na korpu/checkout — sesija i kolačići ostaju isti (nema AJAX + JS redirect).
+     */
+    prepareMealPlanPostFields($form, buyNow) {
+      $form.find("input.kombo-mp-date").remove();
+
+      (this.state.dates || []).forEach((d) => {
+        $("<input>", {
+          type: "hidden",
+          name: "dates[]",
+          value: d,
+          class: "kombo-mp-date",
+        }).appendTo($form);
+      });
+
+      let $flag = $form.find('input[name="kombo_meal_plan_submit"]');
+      if (!$flag.length) {
+        $flag = $(
+          '<input type="hidden" name="kombo_meal_plan_submit" value="0">'
+        ).appendTo($form);
+      }
+      $flag.val("1");
+
+      let $bn = $form.find('input[name="buy_now"]');
+      if (!$bn.length) {
+        $bn = $('<input type="hidden" name="buy_now" value="0">').appendTo(
+          $form
+        );
+      }
+      $bn.val(buyNow ? "1" : "0");
+
+      let $pll = $form.find('input[name="pll_lang"]');
+      if (!$pll.length) {
+        $pll = $('<input type="hidden" name="pll_lang" value="">').appendTo(
+          $form
+        );
+      }
+      $pll.val(mpPllLang());
+    }
+
+    submitMealPlanToWooCommerce(buyNow = false) {
+      mpTrace("form_post_submit", { buyNow, state: { ...this.state } });
       if (!this.validateForm()) {
         alert(mealTranslations.fillAllFields);
         return;
       }
 
-      const $button = buyNow ? $(".buy-now") : $(".submit-button.add-to-cart");
+      const $form = $("#mealPlanForm");
+      if (!$form.length) {
+        alert(mealTranslations.serverError);
+        return;
+      }
+
+      const $button = buyNow
+        ? $(".submit-button.buy-now")
+        : $(".submit-button.add-to-cart");
       const $otherButton = buyNow
         ? $(".submit-button.add-to-cart")
-        : $(".buy-now");
-      const originalText = $button.text();
+        : $(".submit-button.buy-now");
       const loadingText = buyNow
         ? mealTranslations.processing
         : mealTranslations.addingToCart;
@@ -694,63 +750,9 @@ jQuery(document).ready(function ($) {
       $button.prop("disabled", true).text(loadingText);
       $otherButton.prop("disabled", true);
 
-      try {
-        console.log("Sending AJAX data:", {
-          menu_type: this.state.menuType,
-          gender: this.state.gender,
-          calories: this.state.calories,
-          package: this.state.package,
-          dates: this.state.dates,
-          buy_now: buyNow,
-        });
-        const response = await $.ajax({
-          url: meal_plan_vars.ajax_url,
-          type: "POST",
-          data: {
-            action: "add_meal_plan_to_cart",
-            nonce: meal_plan_vars.nonce,
-            menu_type: this.state.menuType,
-            gender: this.state.gender,
-            calories: this.state.calories,
-            package: this.state.package,
-            dates: this.state.dates,
-            buy_now: buyNow,
-          },
-        });
-        console.log("AJAX response:", response);
-
-        if (response.success) {
-          $(document.body).trigger("wc_fragment_refresh");
-
-          if (buyNow && response.data.checkout_url) {
-            window.location.href = response.data.checkout_url;
-          } else {
-            this.resetForm();
-            alert(response.data.message);
-            // Dodajemo refresh nakon alert-a
-            setTimeout(function () {
-              window.location.reload();
-            }, 100);
-          }
-        } else {
-          alert(response.data || "Došlo je do greške. Pokušajte ponovo.");
-        }
-      } catch (error) {
-        console.error("Cart operation failed:", error);
-
-        alert(
-          "Došlo je do greške pri komunikaciji sa serverom. Pokušajte ponovo."
-        );
-      } finally {
-        // Resetujemo tekst i stanje dugmadi
-        $button
-          .prop("disabled", true)
-          .text(buyNow ? "Naruči odmah" : "Dodaj u korpu");
-        $otherButton
-          .prop("disabled", true)
-          .text(buyNow ? "Dodaj u korpu" : "Naruči odmah");
-        $(".form-buttons").hide();
-      }
+      this.prepareMealPlanPostFields($form, buyNow);
+      // DOM .submit() ne okida jQuery "submit" handler (koji i dalje blokira slučajni submit).
+      $form[0].submit();
     }
     initializeDatepicker() {
       if (!$("#deliveryDate").length) {

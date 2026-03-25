@@ -16,8 +16,8 @@
  * @version 9.4.0
  */
 
-if (! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 do_action('woocommerce_before_checkout_form', $checkout);
@@ -107,6 +107,9 @@ if (! $checkout->is_registration_enabled() && $checkout->is_registration_require
     document.addEventListener('DOMContentLoaded', function() {
         const checkbox = document.getElementById('ship-to-different-address-checkbox');
         const shippingSection = document.querySelector('.col-2');
+        if (!checkbox || !shippingSection) {
+            return;
+        }
 
         checkbox.addEventListener('change', function() {
             if (this.checked) {

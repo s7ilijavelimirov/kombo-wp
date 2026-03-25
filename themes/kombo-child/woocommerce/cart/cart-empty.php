@@ -16,12 +16,14 @@
  * @version 7.0.1
  */
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /*
- * @hooked wc_empty_cart_message - 10
+ * Default WC empty line duplicates our Polylang block below; keep hook for other plugins.
  */
-do_action('woocommerce_cart_is_empty');
+remove_action( 'woocommerce_cart_is_empty', 'wc_empty_cart_message', 10 );
+
+do_action( 'woocommerce_cart_is_empty' );
 
 $current_lang = pll_current_language();
 

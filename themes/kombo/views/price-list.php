@@ -65,7 +65,7 @@
         <!-- Nazivi grupa -->
         <div class="price-list-wrapper__groups">
             <?php foreach ($plan_groups as $plan_type => $group_name): ?>
-                <span><?php echo $group_name; ?></span>
+                <span><?php echo esc_html( $group_name ); ?></span>
             <?php endforeach; ?>
         </div>
 
@@ -83,9 +83,9 @@
                 <div class="price-list-wrapper__row">
                     <div>
                         <?php
-                        echo is_array($package_info) ? $package_info['name'] : $package_info;
-                        if (is_array($package_info) && isset($package_info['subtitle'])) {
-                            echo '<br>' . $package_info['subtitle'];
+                        echo esc_html( is_array( $package_info ) ? $package_info['name'] : $package_info );
+                        if ( is_array( $package_info ) && isset( $package_info['subtitle'] ) ) {
+                            echo '<br>' . esc_html( $package_info['subtitle'] );
                         }
                         ?>
                     </div>
@@ -102,9 +102,9 @@
     <!-- Responsive verzija -->
     <div class="price-list-wrapper-responsive">
         <?php foreach ($plan_groups as $plan_type => $group_name): ?>
-            <div class="price-list-wrapper-responsive__column-heading"><?php echo $group_name; ?></div>
+            <div class="price-list-wrapper-responsive__column-heading"><?php echo esc_html( $group_name ); ?></div>
 
-            <div class="price-list-wrapper-responsive__package-size <?php echo $plan_type === 'vege' ? 'vege-package' : ''; ?>">
+            <div class="price-list-wrapper-responsive__package-size <?php echo esc_attr( $plan_type === 'vege' ? 'vege-package' : '' ); ?>">
                 <?php foreach ($plan_calories[$plan_type] as $size => $calories): ?>
                     <div><?php printf('%s - %s%s', pll__($size === 'mali' ? 'Mali' : 'Veliki'), $calories, pll__('kcal')); ?></div>
                 <?php endforeach; ?>
@@ -115,9 +115,9 @@
                     <div>
                         <div class="price-list-wrapper-responsive__package-time">
                             <?php
-                            echo is_array($package_info) ? $package_info['name'] : $package_info;
-                            if (is_array($package_info) && isset($package_info['subtitle'])) {
-                                echo ' ' . $package_info['subtitle'];
+                            echo esc_html( is_array( $package_info ) ? $package_info['name'] : $package_info );
+                            if ( is_array( $package_info ) && isset( $package_info['subtitle'] ) ) {
+                                echo ' ' . esc_html( $package_info['subtitle'] );
                             }
                             ?>
                         </div>

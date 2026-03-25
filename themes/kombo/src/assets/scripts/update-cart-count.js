@@ -5,6 +5,7 @@ jQuery(document).ready(function ($) {
             type: 'POST',
             data: {
                 action: 'get_cart_count',
+                nonce: cartCountAjax.nonce,
             },
             success: function (response) {
                 if (response.success) {

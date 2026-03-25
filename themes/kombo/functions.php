@@ -34,13 +34,6 @@ add_action('after_setup_theme', 'disable_gutenberg_widget_editor');
 
 
 
-// Add WooCommerce support
-function theme_setup()
-{
-    add_theme_support('woocommerce');
-}
-add_action('after_setup_theme', 'theme_setup');
-
 // Promena oznake valute u RSD
 add_filter('woocommerce_currency_symbol', 'change_currency_symbol', 10, 2);
 function change_currency_symbol($currency_symbol, $currency)
@@ -95,9 +88,15 @@ add_action('woocommerce_checkout_update_order_meta', 'custom_checkout_field_upda
 
 function custom_checkout_field_update_order_meta($order_id)
 {
-    if (!empty($_POST['billing_pak'])) {
-        update_post_meta($order_id, 'PAK', sanitize_text_field($_POST['billing_pak']));
+    if (empty($_POST['billing_pak'])) {
+        return;
     }
+    $order = wc_get_order($order_id);
+    if (!$order) {
+        return;
+    }
+    $order->update_meta_data('PAK', sanitize_text_field(wp_unslash($_POST['billing_pak'])));
+    $order->save();
 }
 
 // Display custom field value in the order details in admin
@@ -105,7 +104,11 @@ add_action('woocommerce_admin_order_data_after_billing_address', 'custom_checkou
 
 function custom_checkout_field_display_admin_order_meta($order)
 {
-    echo '<p><strong>' . __('PAK', 'woocommerce') . ':</strong> ' . get_post_meta($order->get_id(), 'PAK', true) . '</p>';
+    if (!$order instanceof \WC_Order) {
+        return;
+    }
+    $pak = $order->get_meta('PAK');
+    echo '<p><strong>' . esc_html(__('PAK', 'woocommerce')) . ':</strong> ' . esc_html((string) $pak) . '</p>';
 }
 
 // Add custom field value to order emails
@@ -117,24 +120,20 @@ function custom_checkout_field_order_meta_keys($keys)
     return $keys;
 }
 
-add_action('wp_footer', 'custom_checkout_field_js');
-
-function custom_checkout_field_js()
+add_action('wp_enqueue_scripts', 'kombo_enqueue_checkout_billing_pak_script');
+function kombo_enqueue_checkout_billing_pak_script()
 {
-    if (is_checkout()) {
-?>
-        <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                $('input[name="billing_pak"]').on('input', function() {
-                    this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
-                    if (this.value.length > 6) {
-                        this.value = this.value.slice(0, 6); // Limit to 6 characters
-                    }
-                });
-            });
-        </script>
-<?php
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return;
     }
+    $path = get_template_directory() . '/src/assets/scripts/checkout-billing-pak.js';
+    wp_enqueue_script(
+        'kombo-billing-pak',
+        get_template_directory_uri() . '/src/assets/scripts/checkout-billing-pak.js',
+        array('jquery'),
+        (file_exists($path) && is_readable($path)) ? (string) filemtime($path) : WPTHEME_VERSION,
+        true
+    );
 }
 function generate_clamp($base_size)
 {
@@ -150,7 +149,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     // WooCommerce theme support
     function yourtheme_add_woocommerce_support()
     {
-        add_theme_support('woocommerce');
+        add_theme_support(
+            'woocommerce',
+            array(
+                'gallery_thumbnail_image_width' => 300,
+            )
+        );
         add_theme_support('wc-product-gallery-zoom');
         add_theme_support('wc-product-gallery-lightbox');
         add_theme_support('wc-product-gallery-slider');
@@ -230,13 +234,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     }
     add_action('get_sidebar', 'yourtheme_wc_sidebar');
 }
-add_action('after_setup_theme', 'my_custom_woocommerce_theme_support');
-function my_custom_woocommerce_theme_support()
-{
-    add_theme_support('woocommerce', array(
-        'gallery_thumbnail_image_width' => 300,
-    ));
-}
 function custom_woocommerce_before_shop_loop()
 {
     echo '<div class="custom-shop-header">';
@@ -261,19 +258,6 @@ function custom_reorder_shop_elements()
 add_action('woocommerce_before_shop_loop', 'custom_woocommerce_before_shop_loop', 15);
 add_action('woocommerce_before_shop_loop', 'custom_woocommerce_after_shop_loop', 35);
 add_action('woocommerce_init', 'custom_reorder_shop_elements');
-add_filter('woocommerce_product_tabs', 'woo_new_product_tab');
-function woo_new_product_tab($tabs)
-{
-    $tabs['new_tab'] = array(
-        'title' => __('Tabela veličine', 'woocommerce'),
-        'priority' => 20,
-        'callback' => 'woo_new_product_tab_content'
-    );
-    return $tabs;
-}
-
-
-
 
 function theme_custom_logo_setup()
 {
@@ -342,21 +326,31 @@ add_action('widgets_init', 'register_footer_widgets');
 
 function enqueue_cart_update_script()
 {
+    if (!function_exists('WC')) {
+        return;
+    }
+    $rel = '/src/assets/scripts/update-cart-count.js';
+    $path = get_template_directory() . $rel;
     wp_enqueue_script(
         'update-cart-count',
-        get_template_directory_uri() . '/src/assets/scripts/update-cart-count.js',
+        get_template_directory_uri() . $rel,
         array('jquery'),
-        null,
+        (file_exists($path) && is_readable($path)) ? (string) filemtime($path) : WPTHEME_VERSION,
         true
     );
     wp_localize_script('update-cart-count', 'cartCountAjax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('get_cart_count'),
     ));
 }
 add_action('wp_enqueue_scripts', 'enqueue_cart_update_script');
 
 function get_cart_count()
 {
+    check_ajax_referer('get_cart_count', 'nonce');
+    if (!function_exists('WC') || !WC()->cart) {
+        wp_send_json_error(array('message' => 'Cart unavailable'));
+    }
     wp_send_json_success(WC()->cart->get_cart_contents_count());
 }
 add_action('wp_ajax_get_cart_count', 'get_cart_count');

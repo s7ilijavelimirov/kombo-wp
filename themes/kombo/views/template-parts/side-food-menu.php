@@ -6,79 +6,73 @@
 
 ?>
 <?php
-$current_lang = pll_current_language();
+$current_lang = function_exists('pll_current_language') ? pll_current_language() : '';
+$side_menu_cache_key = 'kombo_side_menu_' . $current_lang;
+$cached_side = get_transient($side_menu_cache_key);
 
-// Query za standardni meni (ova nedelja)
-$args_standard = array(
-    'post_type' => 'weekly_menu',
-    'posts_per_page' => 1,
-    'orderby' => 'date',
-    'order' => 'DESC',
-    'lang' => $current_lang
-);
-$menu_query_standard = new WP_Query($args_standard);
-
-// Query za vege meni (ova nedelja)
-$args_vege = array(
-    'post_type' => 'vege_menu',
-    'posts_per_page' => 1,
-    'orderby' => 'date',
-    'order' => 'DESC',
-    'lang' => $current_lang
-);
-$menu_query_vege = new WP_Query($args_vege);
-
-// Query za standardni meni (sledeća nedelja)
-$args_next_standard = array(
-    'post_type' => 'next_weekly_menu',
-    'posts_per_page' => 1,
-    'orderby' => 'date',
-    'order' => 'DESC',
-    'lang' => $current_lang
-);
-$menu_query_next_standard = new WP_Query($args_next_standard);
-
-// Query za vege meni (sledeća nedelja)
-$args_next_vege = array(
-    'post_type' => 'next_vege_menu',
-    'posts_per_page' => 1,
-    'orderby' => 'date',
-    'order' => 'DESC',
-    'lang' => $current_lang
-);
-$menu_query_next_vege = new WP_Query($args_next_vege);
-
-if ($menu_query_standard->have_posts()):
-    while ($menu_query_standard->have_posts()):
-        $menu_query_standard->the_post();
-        $side_container_standard = get_field('side_container');
-    endwhile;
+if (false !== $cached_side && is_array($cached_side)) {
+    $side_container_standard = isset($cached_side['standard']) && is_array($cached_side['standard']) ? $cached_side['standard'] : array();
+    $side_container_vege = isset($cached_side['vege']) && is_array($cached_side['vege']) ? $cached_side['vege'] : array();
+    $side_container_next_standard = isset($cached_side['next_standard']) && is_array($cached_side['next_standard']) ? $cached_side['next_standard'] : array();
+    $side_container_next_vege = isset($cached_side['next_vege']) && is_array($cached_side['next_vege']) ? $cached_side['next_vege'] : array();
+} else {
+    $menu_post_types = array('weekly_menu', 'vege_menu', 'next_weekly_menu', 'next_vege_menu');
+    $args_menus = array(
+        'post_type' => $menu_post_types,
+        'posts_per_page' => 32,
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'post_status' => 'publish',
+        'lang' => $current_lang,
+        'no_found_rows' => true,
+        'update_post_meta_cache' => true,
+        'update_post_term_cache' => false,
+    );
+    $menu_query_all = new WP_Query($args_menus);
+    $ids_by_type = array();
+    foreach ($menu_query_all->posts as $p) {
+        if (!isset($ids_by_type[$p->post_type])) {
+            $ids_by_type[$p->post_type] = (int) $p->ID;
+        }
+        if (count($ids_by_type) === count($menu_post_types)) {
+            break;
+        }
+    }
     wp_reset_postdata();
-endif;
 
-if ($menu_query_vege->have_posts()):
-    while ($menu_query_vege->have_posts()):
-        $menu_query_vege->the_post();
-        $side_container_vege = get_field('side_container');
-    endwhile;
-    wp_reset_postdata();
-endif;
+    $side_container_standard = array();
+    $side_container_vege = array();
+    $side_container_next_standard = array();
+    $side_container_next_vege = array();
 
-if ($menu_query_next_standard->have_posts()):
-    while ($menu_query_next_standard->have_posts()):
-        $menu_query_next_standard->the_post();
-        $side_container_next_standard = get_field('side_container');
-    endwhile;
-    wp_reset_postdata();
-endif;
+    if (!empty($ids_by_type['weekly_menu'])) {
+        $f = get_field('side_container', $ids_by_type['weekly_menu']);
+        $side_container_standard = is_array($f) ? $f : array();
+    }
+    if (!empty($ids_by_type['vege_menu'])) {
+        $f = get_field('side_container', $ids_by_type['vege_menu']);
+        $side_container_vege = is_array($f) ? $f : array();
+    }
+    if (!empty($ids_by_type['next_weekly_menu'])) {
+        $f = get_field('side_container', $ids_by_type['next_weekly_menu']);
+        $side_container_next_standard = is_array($f) ? $f : array();
+    }
+    if (!empty($ids_by_type['next_vege_menu'])) {
+        $f = get_field('side_container', $ids_by_type['next_vege_menu']);
+        $side_container_next_vege = is_array($f) ? $f : array();
+    }
 
-if ($menu_query_next_vege->have_posts()):
-    while ($menu_query_next_vege->have_posts()):
-        $menu_query_next_vege->the_post();
-        $side_container_next_vege = get_field('side_container');
-    endwhile;
-    wp_reset_postdata();
-endif;
+    set_transient(
+        $side_menu_cache_key,
+        array(
+            'standard' => $side_container_standard,
+            'vege' => $side_container_vege,
+            'next_standard' => $side_container_next_standard,
+            'next_vege' => $side_container_next_vege,
+        ),
+        15 * MINUTE_IN_SECONDS
+    );
+}
 ?>
 <div class="side_container">
     <section class="menu-trigger-section">
@@ -129,7 +123,7 @@ endif;
                     if (!empty($side_container_standard['weekly_info'])): ?>
                         <div class="weekly_info">
                             <div class="title-wrapper">
-                                <h2><?php echo $side_container_standard['weekly_info']['weekly_time']; ?></h2>
+                                <h2><?php echo esc_html( $side_container_standard['weekly_info']['weekly_time'] ); ?></h2>
                                 <h6><?php echo pll_ru('Meni se objavljuje svake nedelje u sedmici.', 'Меню публикуется еженедельно.') ?></h6>
                             </div>
                             <div class="menu-type-buttons menu-type-buttons-desktop">
@@ -184,7 +178,7 @@ endif;
                                 $day_menu = $side_container_standard[$group_key];
                         ?>
                                 <div class="day-menu">
-                                    <h4><?php echo $day_info['name']; ?></h4>
+                                    <h4><?php echo esc_html( $day_info['name'] ); ?></h4>
                                     <?php
                                     $meals = array();
                                     if ($current_language === 'ru') {
@@ -208,7 +202,7 @@ endif;
                                     foreach ($meals as $meal_key => $meal_name):
                                         $field_name = $meal_key . '_' . $day_info['prefix'];
                                         if (!empty($day_menu[$field_name])): ?>
-                                            <p><span><?php echo $meal_name; ?>:</span> <?php echo $day_menu[$field_name]; ?></p>
+                                            <p><span><?php echo esc_html( $meal_name ); ?>:</span> <?php echo esc_html( $day_menu[ $field_name ] ); ?></p>
                                     <?php endif;
                                     endforeach; ?>
                                     <?php if ($group_key === "saturday_menu"): ?>
@@ -227,7 +221,7 @@ endif;
                     if (!empty($side_container_vege['weekly_info'])): ?>
                         <div class="weekly_info">
                             <div class="title-wrapper">
-                                <h2><?php echo $side_container_vege['weekly_info']['weekly_time']; ?></h2>
+                                <h2><?php echo esc_html( $side_container_vege['weekly_info']['weekly_time'] ); ?></h2>
                                 <h6><?php echo pll_ru('Meni se objavljuje svake nedelje u sedmici.', 'Меню публикуется еженедельно.') ?></h6>
                             </div>
                             <div class="menu-type-buttons menu-type-buttons-desktop">
@@ -282,7 +276,7 @@ endif;
                                 $day_menu = $side_container_vege[$group_key];
                         ?>
                                 <div class="day-menu">
-                                    <h4><?php echo $day_info['name']; ?></h4>
+                                    <h4><?php echo esc_html( $day_info['name'] ); ?></h4>
                                     <?php
                                     $meals = array();
                                     if ($current_language === 'ru') {
@@ -306,7 +300,7 @@ endif;
                                     foreach ($meals as $meal_key => $meal_name):
                                         $field_name = $meal_key . '_' . $day_info['prefix'];
                                         if (!empty($day_menu[$field_name])): ?>
-                                            <p><span><?php echo $meal_name; ?>:</span> <?php echo $day_menu[$field_name]; ?></p>
+                                            <p><span><?php echo esc_html( $meal_name ); ?>:</span> <?php echo esc_html( $day_menu[ $field_name ] ); ?></p>
                                     <?php endif;
                                     endforeach; ?>
                                     <?php if ($group_key === "saturday_menu"): ?>
@@ -360,7 +354,7 @@ endif;
                     if (!empty($side_container_next_standard['weekly_info'])): ?>
                         <div class="weekly_info">
                             <div class="title-wrapper">
-                                <h2><?php echo $side_container_next_standard['weekly_info']['weekly_time']; ?></h2>
+                                <h2><?php echo esc_html( $side_container_next_standard['weekly_info']['weekly_time'] ); ?></h2>
                                 <h6><?php echo pll_ru('Meni se objavljuje svake nedelje u sedmici.', 'Меню публикуется еженедельно.') ?></h6>
                             </div>
                             <div class="menu-type-buttons menu-type-buttons-desktop">
@@ -411,7 +405,7 @@ endif;
                                 $day_menu = $side_container_next_standard[$group_key];
                         ?>
                                 <div class="day-menu">
-                                    <h4><?php echo $day_info['name']; ?></h4>
+                                    <h4><?php echo esc_html( $day_info['name'] ); ?></h4>
                                     <?php
                                     $meals = array();
                                     if ($current_language === 'ru') {
@@ -435,7 +429,7 @@ endif;
                                     foreach ($meals as $meal_key => $meal_name):
                                         $field_name = $meal_key . '_' . $day_info['prefix'];
                                         if (!empty($day_menu[$field_name])): ?>
-                                            <p><span><?php echo $meal_name; ?>:</span> <?php echo $day_menu[$field_name]; ?></p>
+                                            <p><span><?php echo esc_html( $meal_name ); ?>:</span> <?php echo esc_html( $day_menu[ $field_name ] ); ?></p>
                                     <?php endif;
                                     endforeach; ?>
                                     <?php if ($group_key === "saturday_menu"): ?>
@@ -478,7 +472,7 @@ endif;
                     if (!empty($side_container_next_vege['weekly_info'])): ?>
                         <div class="weekly_info">
                             <div class="title-wrapper">
-                                <h2><?php echo $side_container_next_vege['weekly_info']['weekly_time']; ?></h2>
+                                <h2><?php echo esc_html( $side_container_next_vege['weekly_info']['weekly_time'] ); ?></h2>
                                 <h6><?php echo pll_ru('Meni se objavljuje svake nedelje u sedmici.', 'Меню публикуется еженедельно.') ?></h6>
                             </div>
                             <div class="menu-type-buttons menu-type-buttons-desktop">
@@ -529,7 +523,7 @@ endif;
                                 $day_menu = $side_container_next_vege[$group_key];
                         ?>
                                 <div class="day-menu">
-                                    <h4><?php echo $day_info['name']; ?></h4>
+                                    <h4><?php echo esc_html( $day_info['name'] ); ?></h4>
                                     <?php
                                     $meals = array();
                                     if ($current_language === 'ru') {
@@ -553,7 +547,7 @@ endif;
                                     foreach ($meals as $meal_key => $meal_name):
                                         $field_name = $meal_key . '_' . $day_info['prefix'];
                                         if (!empty($day_menu[$field_name])): ?>
-                                            <p><span><?php echo $meal_name; ?>:</span> <?php echo $day_menu[$field_name]; ?></p>
+                                            <p><span><?php echo esc_html( $meal_name ); ?>:</span> <?php echo esc_html( $day_menu[ $field_name ] ); ?></p>
                                     <?php endif;
                                     endforeach; ?>
                                     <?php if ($group_key === "saturday_menu"): ?>
