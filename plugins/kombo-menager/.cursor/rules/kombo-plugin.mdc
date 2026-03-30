@@ -1,0 +1,39 @@
+---
+description: Kombo Manager plugin-specific architectural constraints
+globs: "wp-content/plugins/kombo-menager/**/*.php"
+alwaysApply: false
+---
+
+# Kombo Manager — Architectural Rules
+
+## Boundaries
+- Only modify files inside wp-content/plugins/kombo-menager/
+- Never touch theme files (kombo/ or kombo-child/)
+- Never modify WooCommerce core or WC template files
+- Extend WC via hooks/filters only
+
+## Class structure
+- Main class: KomboManager\KomboManager — singleton via get_instance()
+- Activator: KomboManager\Activator — called only from register_activation_hook
+- Deactivator: KomboManager\Deactivator — called only from register_deactivation_hook
+- Autoloader: KomboManager\Autoloader — registered before anything else
+
+## DB tables
+- Created only in Activator::activate() — never on every page load
+- Always check if table exists before CREATE TABLE
+- Always use $wpdb->prefix . 'km_' prefix
+- Always use dbDelta() for table creation
+
+## Activity log
+- Every manager action must write to {prefix}km_activity_log
+- Log: user_id, manager_name, action_type, object_type, object_id, old_value (JSON), new_value (JSON), created_at
+- No manager feature is complete without its log write
+
+## Reference numbers
+- Format: KM-XXXX where XXXX is zero-padded order ID
+- Generated once on order creation — never regenerated
+- Stored in order meta or km_orders table
+
+## Admin CSS
+- All admin styles scoped with .km-admin- prefix
+- Never override WP core admin styles

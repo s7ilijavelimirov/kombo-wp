@@ -1,4 +1,4 @@
-# Samo naš kod: themes/kombo, themes/kombo-child, plugins/kombo-plugin + README i ovaj fajl.
+# Samo naš kod: themes/kombo, themes/kombo-child, plugins/kombo-menager + README i ovaj fajl.
 # Sve ostalo u wp-content/ (tuđi pluginovi, maintenance, uploads, keš, root fajlovi) ne ide na Git.
 
 # Prvo: ignoriši sve direktno u wp-content/
@@ -16,7 +16,7 @@
 
 # Pluginovi: samo naš
 /plugins/*
-!/plugins/kombo-plugin/
+!/plugins/kombo-menager/
 
 # Logovi / env (bilo gde)
 *.log

@@ -125,8 +125,8 @@
 .menu-type-buttons {
   display: flex;
   gap: 10px;
-  justify-content: end;
-  // width: 73%;
+  //justify-content: end;
+  
   @media (max-width: 1024px) {
     // width: 100%;
     gap: 12px;

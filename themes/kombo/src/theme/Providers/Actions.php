@@ -179,7 +179,7 @@ class Actions
         $template = get_page_template_slug($post_id);
 
         $templates = [
-            "templates/template-example.php"
+            "templates/example-template.php",
         ];
 
         if (in_array($template, $templates)) {

@@ -11,3 +11,20 @@ Tested up to: 6.2
 Requires PHP: 8.0
 Text Domain: kombo-child
 */
+
+.km-ordering-page-banner {
+  width: 100%;
+  margin-top: var(--km-header-offset, 0px);
+}
+
+.km-ordering-page-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.km-ordering-page-banner--slider .km-ordering-page-banner__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

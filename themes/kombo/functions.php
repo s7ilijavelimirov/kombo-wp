@@ -225,14 +225,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     }
     add_filter('woocommerce_breadcrumb_defaults', 'yourtheme_change_breadcrumb_delimiter');
 
-    // Ensure WooCommerce pages have the correct sidebar
-    function yourtheme_wc_sidebar()
-    {
-        if (is_woocommerce()) {
-            get_sidebar('shop');
-        }
-    }
-    add_action('get_sidebar', 'yourtheme_wc_sidebar');
 }
 function custom_woocommerce_before_shop_loop()
 {

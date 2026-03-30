@@ -1,0 +1,42 @@
+---
+description: Security rules — always enforced in kombo-menager plugin
+globs: "wp-content/plugins/kombo-menager/**/*.php"
+alwaysApply: true
+---
+
+# Security — Never Violate
+
+## Every PHP file
+First executable line after <?php and namespace:
+defined('ABSPATH') || exit;
+
+## AJAX handlers
+- check_ajax_referer() before any processing
+- current_user_can() capability check always
+- Never read $_POST/$_GET directly — sanitize first
+
+## Sanitization by type
+- Text: sanitize_text_field()
+- Email: sanitize_email()
+- Integer: absint()
+- HTML: wp_kses_post()
+- URL (save): esc_url_raw()
+
+## Output escaping — always
+- HTML: esc_html()
+- Attributes: esc_attr()
+- URLs: esc_url()
+- JS: wp_json_encode()
+
+## Database
+- $wpdb->prepare() on every query with variable input — no exceptions
+- No SQL string concatenation with user data
+
+## Nonces
+- Every form: wp_nonce_field('km_action', 'km_nonce')
+- Every AJAX: wp_create_nonce() on JS side, check_ajax_referer() on PHP side
+
+## Forbidden
+- No eval()
+- No base64_decode() on dynamic data
+- No direct file includes without ABSPATH check

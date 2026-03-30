@@ -108,10 +108,13 @@ function meal_plan_form_assets()
             'selectDate' => pll__('Molimo izaberite datum'),
             'calendar' => pll__('kalendar'),
             'addToCart' => pll__('Dodaj u korpu'),
+            'addPackage' => pll__('+ Dodaj paket'),
             'buyNow' => pll__('Naruči odmah'),
             'fillAllFields' => pll__('Molimo popunite sva polja'),
             'processing' => pll__('Procesiranje...'),
             'addingToCart' => pll__('Dodavanje u korpu...'),
+            'addingPackage' => pll__('Dodavanje paketa...'),
+            'packageAdded' => pll__('Paket je dodat u korpu. Možete izabrati sledeći.'),
             'serverError' => pll__('Došlo je do greške pri komunikaciji sa serverom. Pokušajte ponovo.'),
             'months' => array(
                 pll__('Januar'),
@@ -367,7 +370,15 @@ function kombo_meal_plan_handle_cart_post()
     if (!headers_sent()) {
         nocache_headers();
     }
-    $target = !empty($result['buy_now']) ? $result['checkout_url'] : $result['cart_url'];
+    $stay_on_page = isset($_POST['stay_on_page']) ? wc_string_to_bool(wp_unslash($_POST['stay_on_page'])) : false;
+    if ($stay_on_page) {
+        $target = wp_get_referer() ?: home_url('/');
+        if (strpos($target, '#mealPlanForm') === false) {
+            $target .= '#mealPlanForm';
+        }
+    } else {
+        $target = !empty($result['buy_now']) ? $result['checkout_url'] : $result['cart_url'];
+    }
     wp_safe_redirect($target);
     exit;
 }

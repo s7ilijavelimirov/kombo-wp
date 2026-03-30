@@ -936,3 +936,52 @@
     display: none;
   }
 }
+
+.km-add-package-floating {
+  z-index: 20;
+  background: #feec69;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 6px 18px;
+  font-size: 16px;
+  line-height: 1.2;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 2rem;
+}
+
+.km-add-package-floating:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.km-meal-plan-snapshots {
+  margin-bottom: 14px;
+}
+
+.km-meal-plan-divider {
+  border-top: 1px dashed #222;
+  margin: 8px 0 16px;
+}
+
+.km-meal-plan-snapshot-item {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.km-meal-plan-forms-column {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+}
+
+.km-meal-plan-forms-column > .meal-plan-form {
+  flex: none;
+  width: 100%;
+}
+
+.km-meal-plan-forms-column .km-meal-plan-snapshot-item .meal-plan-form {
+  margin-top: 0;
+  padding-bottom: 32px;
+}

@@ -27,7 +27,7 @@ function register_my_menus()
 add_action('init', 'register_my_menus');
 function enqueue_slick_slider()
 {
-    if (!is_front_page()) {
+    if (!is_front_page() && !is_page_template('views/porucivanje.php')) {
         return;
     }
 

@@ -1,12 +1,10 @@
 <?php
-get_header();
-if ( have_posts() ) :
-    while ( have_posts() ) : the_post();
-        the_content();
-    endwhile;
-else :
-    echo '<p>No content found</p>';
-endif;
+/**
+ * Required theme file. Primary template: views/index.php (resolved by Core::TemplateHierarchy).
+ *
+ * @package kombo
+ */
 
-get_sidebar();
-get_footer();
+defined('ABSPATH') || exit;
+
+require get_template_directory() . '/views/index.php';

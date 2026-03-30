@@ -20,7 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+echo '<div class="checkout-prelude container">';
 do_action('woocommerce_before_checkout_form', $checkout);
+echo '</div>';
 
 // If checkout registration is disabled and not logged in, the user cannot checkout.
 if (! $checkout->is_registration_enabled() && $checkout->is_registration_required() && ! is_user_logged_in()) {
@@ -107,18 +109,40 @@ if (! $checkout->is_registration_enabled() && $checkout->is_registration_require
     document.addEventListener('DOMContentLoaded', function() {
         const checkbox = document.getElementById('ship-to-different-address-checkbox');
         const shippingSection = document.querySelector('.col-2');
-        if (!checkbox || !shippingSection) {
-            return;
+        if (checkbox && shippingSection) {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    shippingSection.style.display = 'block';
+                    shippingSection.classList.remove('hidden');
+                } else {
+                    shippingSection.style.display = 'none';
+                    shippingSection.classList.add('hidden');
+                }
+            });
         }
 
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                shippingSection.style.display = 'block';
-                shippingSection.classList.remove('hidden');
-            } else {
-                shippingSection.style.display = 'none';
-                shippingSection.classList.add('hidden');
+        const accountFields = document.querySelector('.woocommerce-account-fields');
+        const notesField = document.getElementById('order_comments_field');
+        if (accountFields && notesField) {
+            accountFields.classList.add('kombo-checkout-account-wrap');
+            notesField.insertAdjacentElement('afterend', accountFields);
+
+            const accountLabelText = <?php echo wp_json_encode(pll__('Napravi korisnički nalog')); ?>;
+            const accountInfo1 = <?php echo wp_json_encode(pll__('Klikom na ovo dugme, na unetu email adresu ćete dobiti jedinstveni link putem kojeg možete završiti kreiranje naloga.')); ?>;
+            const accountInfo2 = <?php echo wp_json_encode(pll__('Nalog možete koristiti za biranje adresa za dostavu, praćenje preostalih dana porudžbine i za unos dodatnih napomena kuvarima ili dostavljačima.')); ?>;
+
+            const labelSpan = accountFields.querySelector('.create-account label span');
+            if (labelSpan) {
+                labelSpan.textContent = accountLabelText;
             }
-        });
+
+            if (!accountFields.querySelector('.kombo-account-help')) {
+                const help = document.createElement('div');
+                help.className = 'kombo-account-help';
+                help.innerHTML = '<p>' + accountInfo1 + '</p><p>' + accountInfo2 + '</p>';
+                accountFields.appendChild(help);
+            }
+        }
+
     });
 </script>

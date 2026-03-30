@@ -11,29 +11,47 @@
         the_row() ?>
         <section class="container-fluid front_page_hero_section main-content">
             <div class="main_content_container">
-                <div class="slider_container desktop_slider_container">
+                <div class="slider_container desktop_slider_container hero-slider">
+                    <?php
+                    $hero_desktop_slide_count = 0;
+                    ?>
                     <?php if (have_rows('front_page_hero_slider')): ?>
                         <?php while (have_rows('front_page_hero_slider')):
                             the_row();
                             $slide_image = get_sub_field('slide'); ?>
                             <?php if ($slide_image): ?>
+                                <?php $hero_desktop_slide_count++; ?>
                                 <div class="slide slide-desktop">
                                     <img src="<?php echo esc_url( $slide_image['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Slider img' ); ?>">
                                 </div>
                             <?php endif; ?>
                         <?php endwhile ?>
                     <?php endif; ?>
+                    <?php if ($hero_desktop_slide_count > 0): ?>
+                        <div class="progress_bar_hero" aria-hidden="true">
+                            <div class="progress_bar_hero__fill" style="width: <?php echo esc_attr( (string) (100 / $hero_desktop_slide_count) ); ?>%"></div>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <div class="slider_container mobile_slider_container">
+                <div class="slider_container mobile_slider_container hero-slider">
+                    <?php
+                    $hero_mobile_slide_count = 0;
+                    ?>
                     <?php if (have_rows('front_page_hero_slider_mobile_devices')) : ?>
                         <?php while (have_rows('front_page_hero_slider_mobile_devices')) : the_row();
                             $slide_image_mobile = get_sub_field('slide_image_mobile') ?>
                             <?php if ($slide_image_mobile) : ?>
+                                <?php $hero_mobile_slide_count++; ?>
                                 <div class="slide slide-mobile">
                                     <img src="<?php echo esc_url( $slide_image_mobile['url'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Slider img' ); ?>">
                                 </div>
                             <?php endif; ?>
                         <?php endwhile ?>
+                    <?php endif; ?>
+                    <?php if ($hero_mobile_slide_count > 0): ?>
+                        <div class="progress_bar_hero" aria-hidden="true">
+                            <div class="progress_bar_hero__fill" style="width: <?php echo esc_attr( (string) (100 / $hero_mobile_slide_count) ); ?>%"></div>
+                        </div>
                     <?php endif; ?>
                 </div>
                 <?php if (have_rows('front_page_content_container')): ?>
@@ -1122,11 +1140,14 @@ $link_zasto = get_field('link_zasto');
             const slideCount = slides.length;
             let currentSlide = 0;
 
+            const existingBar = sliderContainer.querySelector('.progress_bar_hero');
+
             // Postavi slajder container kao relativni kontejner
             sliderContainer.style.position = 'relative';
 
-            // Kreiraj wrapper za slajdove
+            // Kreiraj wrapper za slajdove (klasa + isti layout kao pre inicijalizacije — bez FOUC-a)
             const slidesWrapper = document.createElement('div');
+            slidesWrapper.className = 'hero-slider__track';
             slidesWrapper.style.cssText = `
             position: relative;
             width: 100%;
@@ -1150,21 +1171,26 @@ $link_zasto = get_field('link_zasto');
             // Ubaci wrapper na početak slajder kontejnera
             sliderContainer.insertBefore(slidesWrapper, sliderContainer.firstChild);
 
-            // Kreiraj progress bar
-            const progressBarContainer = document.createElement('div');
-            progressBarContainer.classList.add("progress_bar_hero");
-
-            // Kreiraj progress indikator
-            const progressIndicator = document.createElement('div');
-            progressIndicator.style.cssText = `
-            height: 100%;
-            width: ${100 / slideCount}%;
-            background: #0E0E0E;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-        `;
-
-            progressBarContainer.appendChild(progressIndicator);
-            slidesWrapper.appendChild(progressBarContainer);
+            // Progress bar: već u HTML-u (PHP) da nema treperenja; samo ubaci u track i koristi postojeći fill
+            let progressIndicator;
+            if (existingBar) {
+                progressIndicator = existingBar.querySelector('.progress_bar_hero__fill');
+                if (!progressIndicator) {
+                    progressIndicator = document.createElement('div');
+                    progressIndicator.className = 'progress_bar_hero__fill';
+                    existingBar.appendChild(progressIndicator);
+                }
+                progressIndicator.style.width = `${100 / slideCount}%`;
+                slidesWrapper.appendChild(existingBar);
+            } else {
+                const progressBarContainer = document.createElement('div');
+                progressBarContainer.classList.add('progress_bar_hero');
+                progressIndicator = document.createElement('div');
+                progressIndicator.className = 'progress_bar_hero__fill';
+                progressIndicator.style.width = `${100 / slideCount}%`;
+                progressBarContainer.appendChild(progressIndicator);
+                slidesWrapper.appendChild(progressBarContainer);
+            }
 
             function updateProgress() {
                 progressIndicator.style.width = `${((currentSlide + 1) * 100) / slideCount}%`;
@@ -1450,4 +1476,4 @@ $link_zasto = get_field('link_zasto');
         });
     });
 </script>
-<?php do_action("get_footer"); ?>
+<?php get_footer(); ?>

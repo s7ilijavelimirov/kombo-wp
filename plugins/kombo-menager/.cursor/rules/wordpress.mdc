@@ -1,0 +1,36 @@
+---
+description: WordPress PHP coding standards for kombo-menager plugin
+globs: "wp-content/plugins/kombo-menager/**/*.php"
+alwaysApply: false
+---
+
+# WordPress Coding Standards
+
+## Namespace
+- Root: KomboManager
+- Sub: KomboManager\Admin, KomboManager\Frontend, KomboManager\Core, KomboManager\Api
+- Every class file must declare namespace
+
+## Naming
+- Constants: KM_VERSION, KM_DIR, KM_URL, KM_FILE
+- Functions (only when hooks require it): km_function_name()
+- Classes: PascalCase, one class per file
+- Custom hooks: kombo_manager_{hook_name}
+
+## Hook registration
+- All add_action / add_filter inside __construct() or register_hooks() only
+- Never at file scope (top level)
+
+## Options / meta / transients
+- Options API keys: km_{key}
+- User meta keys: km_{key}
+- Transients: km_transient_{key}
+
+## Enqueue
+- Scripts/styles via wp_enqueue_scripts or admin_enqueue_scripts
+- Handle prefix: km-{handle}
+- Never inline <script> or <style> tags from PHP
+
+## Translation
+- All user-facing strings: __('string', 'kombo-menager') or _e()
+- No hardcoded Serbian strings in PHP output

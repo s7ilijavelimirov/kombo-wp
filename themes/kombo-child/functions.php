@@ -74,3 +74,57 @@ add_action(
     },
     20
 );
+
+add_action('acf/init', 'kombo_child_register_ordering_page_banner_field_group');
+function kombo_child_register_ordering_page_banner_field_group()
+{
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
+
+    acf_add_local_field_group(array(
+        'key' => 'group_kombo_ordering_page_banner',
+        'title' => 'Ordering Page Banner',
+        'fields' => array(
+            array(
+                'key' => 'field_kombo_ordering_page_banner_slides',
+                'label' => 'Banner Slides',
+                'name' => 'ordering_page_banner_slides',
+                'type' => 'repeater',
+                'layout' => 'row',
+                'button_label' => 'Add Slide',
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_kombo_ordering_page_banner_slide_desktop_image',
+                        'label' => 'Desktop Image',
+                        'name' => 'desktop_image',
+                        'type' => 'image',
+                        'return_format' => 'url',
+                        'preview_size' => 'large',
+                        'library' => 'all',
+                    ),
+                    array(
+                        'key' => 'field_kombo_ordering_page_banner_slide_mobile_image',
+                        'label' => 'Mobile Image',
+                        'name' => 'mobile_image',
+                        'type' => 'image',
+                        'return_format' => 'url',
+                        'preview_size' => 'large',
+                        'library' => 'all',
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param' => 'page_template',
+                    'operator' => '==',
+                    'value' => 'views/porucivanje.php',
+                ),
+            ),
+        ),
+        'position' => 'acf_after_title',
+        'style' => 'seamless',
+    ));
+}

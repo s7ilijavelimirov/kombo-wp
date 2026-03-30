@@ -6,7 +6,7 @@
  * Post Type: page
  */
 
-do_action("get_header");
+get_header();
 ?>
 
 <?php while(have_posts()): the_post(); ?>
@@ -24,4 +24,4 @@ do_action("get_header");
 </div>
 <?php endwhile; ?>
 
-<?php do_action("get_footer"); ?>
+<?php get_footer(); ?>

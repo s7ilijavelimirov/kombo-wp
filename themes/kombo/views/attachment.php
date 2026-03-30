@@ -1,4 +1,4 @@
-<?php do_action("get_header"); ?>
+<?php get_header(); ?>
 
 <?php while(have_posts()): the_post(); ?>
 <div class="container">
@@ -21,4 +21,4 @@
 </div>
 <?php endwhile; ?>
 
-<?php do_action("get_footer"); ?>
+<?php get_footer(); ?>

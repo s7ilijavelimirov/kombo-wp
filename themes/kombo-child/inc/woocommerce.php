@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Disable parent-theme PAK checkout field and related handlers.
+ */
+add_action('init', 'kombo_child_disable_parent_pak_checkout_hooks', 20);
+function kombo_child_disable_parent_pak_checkout_hooks()
+{
+    remove_filter('woocommerce_checkout_fields', 'custom_checkout_fields', 10);
+    remove_action('woocommerce_checkout_process', 'custom_checkout_field_process', 10);
+    remove_action('woocommerce_checkout_update_order_meta', 'custom_checkout_field_update_order_meta', 10);
+}
+
 
 
 function custom_remove_checkout_fields($fields)

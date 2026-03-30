@@ -8,7 +8,7 @@ Use this file when modifying or extending the **parent** theme (`kombo`).
 
 - **Boot:** `functions.php` → Composer autoload → `\WpTheme\Main::Init()`.
 - **Namespaced code:** `src/theme/` (`WpTheme\Core`, `WpTheme\Providers`, etc.).
-- **Rendered templates:** `views/` (selected via `Core::TemplateHierarchy` when a matching file exists under `views/`).
+- **Rendered templates:** `views/` (selected via `Core::TemplateHierarchy` when a matching file exists under `views/`). Use **`get_header()`** / **`get_footer()`** in those templates — root **`header.php`** / **`footer.php`** load `views/partials/header.php` and `views/partials/footer.php` (standard WordPress flow; plugins can hook `get_header` / `get_footer` actions).
 - **Built assets:** `public/css/style.css`, `public/js/script.js` (do not hand-edit if the build pipeline generates them).
 
 ---
@@ -47,7 +47,7 @@ Use this file when modifying or extending the **parent** theme (`kombo`).
 
 ## What must NOT be changed without explicit approval
 
-- `Core::TemplateHierarchy` and partial remapping (`get_header`, `get_footer`) — breaks all templates.
+- `Core::TemplateHierarchy` — remapping `views/*.php` for hierarchy names; changing it breaks template resolution across the theme.
 - Database migrations (`PhinxWrapper`) and Eloquent connection — data integrity.
 - Production behavior of WooCommerce hooks in `functions.php` (currency, checkout fields, shop loop) — financial and legal impact.
 

@@ -1,0 +1,39 @@
+---
+description: Polylang i18n rules for kombo-menager plugin
+globs: "wp-content/plugins/kombo-menager/**/*.php"
+alwaysApply: false
+---
+
+# Polylang — Internationalization Rules
+
+## Active languages on kombomeals.rs
+- Serbian (sr_RS) — default
+- Russian (ru_RU)
+- English (en_US)
+
+## Plugin uses WordPress i18n + Polylang string registration
+- All translatable strings: __('string', 'kombo-menager') or _e('string', 'kombo-menager')
+- Text domain: kombo-menager
+- Translation files live in: languages/
+- File naming: kombo-menager-sr_RS.po / .mo, kombo-menager-ru_RU.po / .mo
+
+## Polylang custom string registration
+- Every custom string that is NOT in a PHP template must be registered via pll_register_string()
+- Registration happens in: includes/class-i18n.php — method register_strings()
+- Called on: plugins_loaded hook (already wired in main class)
+- Never call pll_register_string() inline in random files — always goes through class-i18n.php
+
+## String registration format
+pll_register_string( 'unique-key', 'Default string in English', 'Kombo Manager' );
+
+## Rules
+- Never hardcode Serbian, Russian, or English strings directly in PHP output
+- All admin notices, labels, error messages → go through __() or pll__()
+- When adding a new user-facing string → add to class-i18n.php register_strings() immediately
+- Frontend strings visible to customers → must be registered in Polylang so they appear in Polylang UI for translation
+- Admin-only strings (manager/kitchen) → standard __() is enough, no pll_register_string needed
+
+## Dynamic strings (e.g. order status labels)
+- Define as array in class-i18n.php
+- Run each through pll_register_string() on registration
+- Retrieve with pll__() not __()

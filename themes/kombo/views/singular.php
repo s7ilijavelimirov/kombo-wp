@@ -1,9 +1,10 @@
-<?php do_action("get_header"); ?>
+<?php get_header(); ?>
 
 <?php while(have_posts()): the_post(); ?>
 <div class="container">
     <div class="row">
         <article class="col-12">
+   
             <h1><?php echo get_the_title(); ?></h1>
             <p><?php echo get_the_excerpt(); ?></p>
 
@@ -14,6 +15,7 @@
             <hr>
 
             <div class="content">
+             
                 <?php the_content(); ?>
             </div>
         </article>
@@ -21,4 +23,4 @@
 </div>
 <?php endwhile; ?>
 
-<?php do_action("get_footer"); ?>
+<?php get_footer(); ?>

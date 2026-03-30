@@ -26,9 +26,12 @@ jQuery(document).ready(function ($) {
   class MealPlanForm {
     constructor() {
       this.state = new MealPlanState();
+      this.pendingPackages = [];
+      this.lockAddPackageButton = false;
+      const $activeForm = this.getActiveForm();
 
-      if (!$("#deliveryDate").length) {
-        $(".date-selection").html(`
+      if (!$activeForm.find("#deliveryDate").length) {
+        $activeForm.find(".date-selection").html(`
           <div class="calendar-trigger">
             <div class="date-range-wrapper">
               <div class="date-range-display">
@@ -49,7 +52,7 @@ jQuery(document).ready(function ($) {
         .on("click", ".calendar-trigger", (e) => {
           e.preventDefault();
           e.stopPropagation();
-          const $datepicker = $("#deliveryDate");
+          const $datepicker = this.getActiveForm().find("#deliveryDate");
           if ($datepicker.length) {
             $datepicker.datepicker("show");
           }
@@ -57,11 +60,17 @@ jQuery(document).ready(function ($) {
 
       this.init();
     }
+    getActiveForm() {
+      return $(".km-meal-plan-forms-column > .meal-plan-form").not(
+        ".km-meal-plan-snapshot"
+      );
+    }
 
     init() {
       // Sakrijemo dugmiće na početku
       $(".form-buttons").hide();
       $(".submit-button").prop("disabled", true);
+      this.ensureFloatingAddPackageButton();
 
       this.updateArrowPosition("menu-type");
       this.initializeDatepicker();
@@ -69,8 +78,55 @@ jQuery(document).ready(function ($) {
       this.validateForm();
       this.initButtonValidation();
     }
+    ensureFloatingAddPackageButton() {
+      if ($(".meal-plan-form .km-add-package-floating").length) {
+        return;
+      }
+
+      const addPackageLabel =
+        typeof mealTranslations !== "undefined" && mealTranslations.addPackage
+          ? mealTranslations.addPackage
+          : "+Dodaj paket";
+
+      $(".meal-plan-form").append(
+        `<button disabled type="button" class="km-add-package-floating"><span>${addPackageLabel}</span></button>`
+      );
+    }
     initButtonValidation() {
       // Validacija je u delegated click handlerima + addToCart (izbegavamo duplirane listenere).
+    }
+    clearSavedSnapshots() {
+      $(".km-meal-plan-snapshots").remove();
+      this.pendingPackages = [];
+      this.lockAddPackageButton = false;
+    }
+    addCurrentSnapshotToDom() {
+      const $source = $(".meal-plan-form").first();
+      if (!$source.length) return;
+
+      const $snapshot = $source.clone();
+      $snapshot.addClass("km-meal-plan-snapshot");
+      $snapshot.find(".km-add-package-floating").remove();
+      $snapshot.find(".form-arrow").remove();
+      $snapshot.find(".form-buttons").remove();
+      $snapshot.find("[id]").removeAttr("id");
+      $snapshot.find("[name]").removeAttr("name");
+      $snapshot.find("button, input, select, textarea").prop("disabled", true);
+
+      const $formsColumn = $(".km-meal-plan-forms-column").first();
+      const $activeForm = $formsColumn.find(".meal-plan-form").first();
+      if (!$formsColumn.length || !$activeForm.length) return;
+
+      let $stack = $formsColumn.children(".km-meal-plan-snapshots");
+      if (!$stack.length) {
+        $stack = $('<div class="km-meal-plan-snapshots"></div>');
+        $formsColumn.prepend($stack);
+      }
+
+      $stack.append(
+        $('<div class="km-meal-plan-snapshot-item"></div>').append($snapshot)
+      );
+      $stack.append('<div class="km-meal-plan-divider"></div>');
     }
 
     updateArrowPosition(step) {
@@ -105,6 +161,7 @@ jQuery(document).ready(function ($) {
     }
 
     validateForm() {
+      const $activeForm = this.getActiveForm();
       const isValid =
         this.state.gender &&
         this.state.calories &&
@@ -112,13 +169,16 @@ jQuery(document).ready(function ($) {
         this.state.dates.length > 0;
 
       // Dugmići se prikazuju samo kad su SVE vrednosti validne
-      $(".form-buttons")[isValid ? "show" : "hide"]();
-      $(".submit-button").prop("disabled", !isValid);
+      $activeForm.find(".form-buttons")[isValid ? "show" : "hide"]();
+      $activeForm.find(".submit-button").prop("disabled", !isValid);
+      const shouldDisableAddPackage = !isValid || this.lockAddPackageButton;
+      $activeForm.find(".km-add-package-floating").prop("disabled", shouldDisableAddPackage);
 
       return isValid;
     }
 
     resetForm() {
+      const $activeForm = this.getActiveForm();
       // Reset state (zadržavamo menuType)
       const currentMenuType = this.state.menuType;
       this.state = {
@@ -130,29 +190,32 @@ jQuery(document).ready(function ($) {
       };
 
       // Reset UI
-      $(".form-button").removeClass("active");
-      $("#selectedGender, #selectedCalories, #selectedPackage").val("");
-      $(".calendar-trigger").removeClass("active");
-      $(".meal-plan-price").empty();
-      $(".meal-plan-price-wrapper").hide();
+      $activeForm.find(".form-button").removeClass("active");
+      $activeForm.find("#selectedGender, #selectedCalories, #selectedPackage").val("");
+      $activeForm.find(".calendar-trigger").removeClass("active");
+      $activeForm.find(".meal-plan-price").empty();
+      $activeForm.find(".meal-plan-price-wrapper").hide();
 
       // Reset dugmadi
-      $(".form-buttons").hide();
-      $(".submit-button.add-to-cart")
+      $activeForm.find(".form-buttons").hide();
+      $activeForm.find(".submit-button.add-to-cart")
         .text(mealTranslations.addToCart)
         .prop("disabled", true);
-      $(".submit-button.buy-now")
+      $activeForm.find(".submit-button.buy-now")
         .text(mealTranslations.buyNow)
         .prop("disabled", true);
 
       // Reset calories buttons
-      $(".calories-buttons .form-button")
+      const $calButtons = $activeForm.find(".calories-buttons .form-button");
+      $calButtons
         .addClass("calorie-placeholder")
         .removeClass("with-calories")
-        .text("Kcal");
+        .text("Kcal")
+        .css("opacity", "1")
+        .show();
 
       // Reset package prices
-      $(".package-price").each(function () {
+      $activeForm.find(".package-price").each(function () {
         const $price = $(this);
         if ($price.closest('[data-package="dnevni"]').length) {
           $price.html("rsd po danu");
@@ -162,14 +225,22 @@ jQuery(document).ready(function ($) {
       });
 
       // Reset date selection ali zadržimo strukturu
-      $(".start-date").empty();
-      $("#deliveryDate").val("");
+      $activeForm.find(".start-date").empty();
+      $activeForm.find("#deliveryDate").val("");
 
-      this.updateArrowPosition("gender");
+      // Vrati korisnika na početni korak nove forme.
+      $activeForm.find(".menu-type-buttons .menu-type-btn").removeClass("active");
+      $activeForm
+        .find('.menu-type-buttons .menu-type-btn[data-menu-type="standard"]')
+        .addClass("active");
+      $activeForm.find("#selectedMenuType").val("standard");
+      this.state.menuType = "standard";
+      this.updateArrowPosition("menu-type");
       this.validateForm();
     }
 
     resetFormAfterMenuTypeChange(menuType) {
+      const $activeForm = this.getActiveForm();
       // Reset selections osim menuType
       this.state.gender = "";
       this.state.calories = "";
@@ -177,25 +248,25 @@ jQuery(document).ready(function ($) {
       this.state.dates = [];
 
       // Reset UI
-      $(".gender-buttons .form-button").removeClass("active");
-      $(".calories-buttons .form-button").removeClass("active");
-      $(".package-buttons .form-button").removeClass("active");
-      $("#selectedGender, #selectedCalories, #selectedPackage").val("");
-      $(".calendar-trigger").removeClass("active");
-      $(".meal-plan-price").empty();
-      $(".meal-plan-price-wrapper").hide();
-      $(".form-buttons").hide();
-      $(".submit-button").prop("disabled", true);
-      $(".start-date").empty();
-      $("#deliveryDate").val("");
+      $activeForm.find(".gender-buttons .form-button").removeClass("active");
+      $activeForm.find(".calories-buttons .form-button").removeClass("active");
+      $activeForm.find(".package-buttons .form-button").removeClass("active");
+      $activeForm.find("#selectedGender, #selectedCalories, #selectedPackage").val("");
+      $activeForm.find(".calendar-trigger").removeClass("active");
+      $activeForm.find(".meal-plan-price").empty();
+      $activeForm.find(".meal-plan-price-wrapper").hide();
+      $activeForm.find(".form-buttons").hide();
+      $activeForm.find(".submit-button").prop("disabled", true);
+      $activeForm.find(".start-date").empty();
+      $activeForm.find("#deliveryDate").val("");
 
       if (menuType === "vege") {
         // Sakri gender buttons (Slim/Fit/Protein Plus)
-        $("#gender-buttons").hide();
+        $activeForm.find("#gender-buttons").hide();
 
         // Postavi vege kao gender i prikazi vege calories
         this.state.gender = "vege";
-        $("#selectedGender").val("vege");
+        $activeForm.find("#selectedGender").val("vege");
 
         // Ažuriraj calories opcije za vege
         this.updateCaloriesOptionsForVege();
@@ -204,20 +275,22 @@ jQuery(document).ready(function ($) {
         this.updateArrowPosition("calories");
       } else {
         // Prikaži gender buttons
-        $("#gender-buttons").show();
+        $activeForm.find("#gender-buttons").show();
 
         // Reset calories buttons na placeholder
-        $(".calories-buttons .form-button")
+        $activeForm.find(".calories-buttons .form-button")
           .addClass("calorie-placeholder")
           .removeClass("with-calories")
-          .text("Kcal");
+          .text("Kcal")
+          .css("opacity", "1")
+          .show();
 
         // Pomeri strelicu na gender korak
         this.updateArrowPosition("gender");
       }
 
       // Reset package prices
-      $(".package-price").each(function () {
+      $activeForm.find(".package-price").each(function () {
         const $price = $(this);
         if ($price.closest('[data-package="dnevni"]').length) {
           $price.html("rsd po danu");
@@ -230,7 +303,7 @@ jQuery(document).ready(function ($) {
     }
 
     updateCaloriesOptionsForVege() {
-      const $buttons = $(".calories-buttons .form-button");
+      const $buttons = this.getActiveForm().find(".calories-buttons .form-button");
       $buttons.css("opacity", "0");
 
       setTimeout(() => {
@@ -254,57 +327,74 @@ jQuery(document).ready(function ($) {
     }
 
     checkButtonsVisibility() {
+      const $activeForm = this.getActiveForm();
       if (this.state.gender && this.state.calories && this.state.package) {
-        $(".form-buttons").show();
+        $activeForm.find(".form-buttons").show();
 
         // Proveravamo datume
         const hasDate = this.state.dates && this.state.dates.length > 0;
         console.log("Checking dates in visibility:", hasDate);
 
         // Enable/disable dugmad i dodaj/ukloni event listenere
-        $(".submit-button.add-to-cart, .submit-button.buy-now").each(
+        $activeForm.find(".submit-button.add-to-cart, .submit-button.buy-now, .km-add-package-floating").each(
           (_, button) => {
             if (!hasDate) {
-              // Ako nema datuma, omogući dugme ali dodaj listener za alert
-              $(button).prop("disabled", false);
+              $(button).prop("disabled", true);
             } else {
-              // Ako ima datuma, omogući dugme i ukloni listener
               $(button).prop("disabled", false);
             }
           }
         );
 
-        $(".meal-plan-price-wrapper").show();
+        $activeForm.find(".meal-plan-price-wrapper").show();
         this.updatePrice();
       }
     }
     // Dodajte novi kod ovde
     bindEvents() {
       // Menu Type selection (Standardni / Vege)
-      $(".menu-type-buttons .menu-type-btn").on("click", (e) => {
+      $(document)
+      .off(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .menu-type-buttons .menu-type-btn"
+      )
+      .on(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .menu-type-buttons .menu-type-btn",
+        (e) => {
         e.preventDefault();
         const menuType = $(e.currentTarget).data("menu-type");
+        const $activeForm = this.getActiveForm();
 
-        $(".menu-type-buttons .menu-type-btn").removeClass("active");
+        $activeForm.find(".menu-type-buttons .menu-type-btn").removeClass("active");
         $(e.currentTarget).addClass("active");
 
         this.state.menuType = menuType;
-        $("#selectedMenuType").val(menuType);
+        $activeForm.find("#selectedMenuType").val(menuType);
 
         // Reset forme kada se menja tip menija
         this.resetFormAfterMenuTypeChange(menuType);
       });
 
       // Gender selection
-      $(".gender-buttons .form-button").on("click", (e) => {
+      $(document)
+      .off(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .gender-buttons .form-button"
+      )
+      .on(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .gender-buttons .form-button",
+        (e) => {
         e.preventDefault();
         const selectedGender = $(e.currentTarget).data("gender");
+        const $activeForm = this.getActiveForm();
 
-        $(".gender-buttons .form-button").removeClass("active");
+        $activeForm.find(".gender-buttons .form-button").removeClass("active");
         $(e.currentTarget).addClass("active");
 
         this.state.gender = selectedGender;
-        $("#selectedGender").val(selectedGender);
+        $activeForm.find("#selectedGender").val(selectedGender);
 
         this.updateCaloriesOptions(selectedGender);
         this.updateArrowPosition("calories");
@@ -312,15 +402,24 @@ jQuery(document).ready(function ($) {
       });
 
       // Calories selection
-      $(".calories-buttons .form-button").on("click", (e) => {
+      $(document)
+      .off(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .calories-buttons .form-button"
+      )
+      .on(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .calories-buttons .form-button",
+        (e) => {
         e.preventDefault();
         const calories = $(e.currentTarget).data("calories");
+        const $activeForm = this.getActiveForm();
 
-        $(".calories-buttons .form-button").removeClass("active");
+        $activeForm.find(".calories-buttons .form-button").removeClass("active");
         $(e.currentTarget).addClass("active");
 
         this.state.calories = calories;
-        $("#selectedCalories").val(calories);
+        $activeForm.find("#selectedCalories").val(calories);
 
         this.updateAllPrices();
         this.updateArrowPosition("package");
@@ -328,83 +427,250 @@ jQuery(document).ready(function ($) {
       });
 
       // Package selection
-      $(".package-buttons .form-button").on("click", (e) => {
+      $(document)
+      .off(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .package-buttons .form-button"
+      )
+      .on(
+        "click",
+        ".km-meal-plan-forms-column > .meal-plan-form:not(.km-meal-plan-snapshot) .package-buttons .form-button",
+        (e) => {
         e.preventDefault();
         const selectedPackage = $(e.currentTarget).data("package");
+        const $activeForm = this.getActiveForm();
 
-        $(".package-buttons .form-button").removeClass("active");
+        $activeForm.find(".package-buttons .form-button").removeClass("active");
         $(e.currentTarget).addClass("active");
 
         this.state.package = selectedPackage;
-        $("#selectedPackage").val(selectedPackage);
+        $activeForm.find("#selectedPackage").val(selectedPackage);
 
         this.state.dates = [];
-        $(".start-date").empty();
-        $(".calendar-trigger").addClass("active");
+        $activeForm.find(".start-date").empty();
+        $activeForm.find(".calendar-trigger").addClass("active");
 
         this.initializeDatepicker();
         this.updateArrowPosition("calendar");
 
         if (this.state.gender && this.state.calories && this.state.package) {
-          $(".form-buttons").show();
-          $(".submit-button").prop("disabled", false);
+          $activeForm.find(".form-buttons").show();
+          $activeForm.find(".submit-button").prop("disabled", false);
           this.updatePrice();
-          $(".meal-plan-price-wrapper").show();
+          $activeForm.find(".meal-plan-price-wrapper").show();
         }
         this.checkButtonsVisibility();
       });
 
-      // Direktno hvatanje klika na dugmad, ignorišući disabled stanje
-      const cartButton = document.querySelector(".submit-button.add-to-cart");
-      const buyButton = document.querySelector(".submit-button.buy-now");
-
-      if (cartButton) {
-        cartButton.addEventListener(
-          "mousedown",
-          (e) => {
-            console.log("Cart button clicked - checking dates");
-            if (!this.state.dates || this.state.dates.length === 0) {
-              e.preventDefault();
-              e.stopPropagation();
-              alert("Molimo popunite sva polja");
-              return false;
-            }
-          },
-          true
-        );
-      }
-
-      if (buyButton) {
-        buyButton.addEventListener(
-          "mousedown",
-          (e) => {
-            console.log("Buy button clicked - checking dates");
-            if (!this.state.dates || this.state.dates.length === 0) {
-              e.preventDefault();
-              e.stopPropagation();
-              alert("Molimo popunite sva polja");
-              return false;
-            }
-          },
-          true
-        );
-      }
-
-      $("#mealPlanForm").on("submit", (e) => {
+      $(document).off("submit", "#mealPlanForm").on("submit", "#mealPlanForm", (e) => {
         e.preventDefault();
       });
 
       $(document).on("click", ".submit-button.add-to-cart", (e) => {
         e.preventDefault();
         mpTrace("click_add_to_cart");
-        this.submitMealPlanToWooCommerce(false);
+        this.submitAllPackagesToCartAjax();
       });
 
       $(document).on("click", ".submit-button.buy-now", (e) => {
         e.preventDefault();
         mpTrace("click_buy_now");
-        this.submitMealPlanToWooCommerce(true);
+        this.submitAllPackagesToCartAjax(true);
       });
+
+      $(document).on("click", ".km-add-package-floating", (e) => {
+        e.preventDefault();
+        mpTrace("click_add_package");
+        if (!this.validateForm()) {
+          alert(mealTranslations.fillAllFields);
+          return;
+        }
+        this.pendingPackages.push({
+          menu_type: this.state.menuType,
+          gender: this.state.gender,
+          calories: this.state.calories,
+          package: this.state.package,
+          dates: Array.isArray(this.state.dates) ? [...this.state.dates] : [],
+        });
+        this.addCurrentSnapshotToDom();
+        this.resetForm();
+        const $activeForm = $(".meal-plan-form").first();
+        if ($activeForm.length) {
+          $("html, body").animate({ scrollTop: $activeForm.offset().top - 20 }, 220);
+        }
+      });
+    }
+    parseAjaxJsonResponse(responseText) {
+      if (typeof responseText !== "string") {
+        return responseText;
+      }
+      try {
+        return JSON.parse(responseText);
+      } catch (e) {
+        const start = responseText.lastIndexOf('{"success"');
+        if (start !== -1) {
+          try {
+            return JSON.parse(responseText.slice(start));
+          } catch (e2) {
+            return null;
+          }
+        }
+        return null;
+      }
+    }
+
+    addSinglePackageToCartAjax(pkg) {
+      return new Promise((resolve, reject) => {
+        const payload = {
+          action: "add_meal_plan_to_cart",
+          nonce: meal_plan_vars.nonce,
+          pll_lang: mpPllLang(),
+          menu_type: pkg.menu_type,
+          gender: pkg.gender,
+          calories: pkg.calories,
+          package: pkg.package,
+          dates: pkg.dates || [],
+          buy_now: 0,
+        };
+        mpTrace("ajax_add_single_payload", payload);
+        $.ajax({
+          url: meal_plan_vars.ajax_url,
+          type: "POST",
+          dataType: "text",
+          data: payload,
+          success: (raw) => {
+            const parsed = this.parseAjaxJsonResponse(raw);
+            mpTrace("ajax_add_single_response", parsed || { raw });
+            if (parsed && parsed.success) {
+              resolve(parsed);
+              return;
+            }
+            reject(parsed && parsed.data ? parsed.data : mealTranslations.serverError);
+          },
+          error: () => reject(mealTranslations.serverError),
+        });
+      });
+    }
+
+    async submitAllPackagesToCartAjax(redirectToCheckout = false) {
+      if (!this.validateForm()) {
+        alert(mealTranslations.fillAllFields);
+        return;
+      }
+
+      const $button = this.getActiveForm().find(
+        redirectToCheckout
+          ? ".submit-button.buy-now"
+          : ".submit-button.add-to-cart"
+      );
+      const $otherButtons = this.getActiveForm().find(
+        redirectToCheckout
+          ? ".submit-button.add-to-cart, .km-add-package-floating"
+          : ".submit-button.buy-now, .km-add-package-floating"
+      );
+      const defaultText = redirectToCheckout
+        ? mealTranslations.buyNow || "Naruči odmah"
+        : mealTranslations.addToCart || "Dodaj u korpu";
+      const loadingText = redirectToCheckout
+        ? mealTranslations.processing || "Procesiranje..."
+        : mealTranslations.addingToCart || "Dodavanje u korpu...";
+      $button.prop("disabled", true).text(loadingText);
+      $otherButtons.prop("disabled", true);
+      try {
+        const toAdd = [
+          ...this.pendingPackages,
+          {
+            menu_type: this.state.menuType,
+            gender: this.state.gender,
+            calories: this.state.calories,
+            package: this.state.package,
+            dates: Array.isArray(this.state.dates) ? [...this.state.dates] : [],
+          },
+        ];
+        let lastResponse = null;
+        for (const pkg of toAdd) {
+          // eslint-disable-next-line no-await-in-loop
+          lastResponse = await this.addSinglePackageToCartAjax(pkg);
+        }
+        $(document.body).trigger("wc_fragment_refresh");
+        this.refreshHeaderCartCount();
+        this.clearSavedSnapshots();
+        this.resetForm();
+        if (redirectToCheckout) {
+          const checkoutUrl =
+            lastResponse &&
+            lastResponse.data &&
+            lastResponse.data.checkout_url
+              ? lastResponse.data.checkout_url
+              : null;
+          if (checkoutUrl) {
+            window.location.href = checkoutUrl;
+            return;
+          }
+        }
+        // Posle uspešnog dodavanja u korpu, više ne dozvoljavamo dodavanje novih paketa u ovom ciklusu.
+        this.lockAddPackageButton = true;
+        this.getActiveForm().find(".km-add-package-floating").prop("disabled", true);
+        alert(`${toAdd.length} paket(a) dodato u korpu.`);
+        $("html, body").animate({ scrollTop: 0 }, 300);
+      } catch (err) {
+        alert(typeof err === "string" ? err : mealTranslations.serverError);
+      } finally {
+        $button.prop("disabled", false).text(defaultText);
+        $otherButtons.prop("disabled", false);
+      }
+    }
+
+    refreshHeaderCartCount() {
+      const ensureCartCountBadges = () => {
+        $(".cart-icon a").each(function () {
+          if (!$(this).find(".cart-count").length) {
+            $(this).append('<span class="cart-count" style="display:none;"></span>');
+          }
+        });
+      };
+
+      const applyCountToBadges = (count) => {
+        ensureCartCountBadges();
+        const $counts = $(".cart-icon .cart-count, .xoo-wsc-sc-count");
+        if (count > 0) {
+          $counts.text(count).show();
+        } else {
+          $counts.hide();
+        }
+      };
+
+      if (
+        typeof cartCountAjax === "undefined" ||
+        !cartCountAjax.ajax_url ||
+        !cartCountAjax.nonce
+      ) {
+        // Fallback when localized object is unavailable.
+        applyCountToBadges(1);
+        return;
+      }
+
+      const fetchAndApplyCount = () => {
+        $.ajax({
+          url: cartCountAjax.ajax_url,
+          type: "POST",
+          dataType: "json",
+          data: {
+            action: "get_cart_count",
+            nonce: cartCountAjax.nonce,
+          },
+          success: (response) => {
+            if (!response || !response.success) return;
+            const count = parseInt(response.data, 10) || 0;
+            applyCountToBadges(count);
+            $(document.body).trigger("added_to_cart");
+          },
+        });
+      };
+
+      // Immediate + delayed pass (cookie/session propagation race on some local stacks).
+      fetchAndApplyCount();
+      setTimeout(fetchAndApplyCount, 180);
     }
 
     updateCaloriesOptions(gender) {
@@ -417,7 +683,7 @@ jQuery(document).ready(function ($) {
       const options = caloriesMap[gender];
       if (!options) return;
 
-      const $buttons = $(".calories-buttons .form-button");
+      const $buttons = this.getActiveForm().find(".calories-buttons .form-button");
       $buttons.css("opacity", "0");
 
       setTimeout(() => {
@@ -445,11 +711,12 @@ jQuery(document).ready(function ($) {
       // Reset calories selection
       $buttons.removeClass("active");
       this.state.calories = "";
-      $("#selectedCalories").val("");
+      this.getActiveForm().find("#selectedCalories").val("");
     }
 
     updateAllPrices() {
       if (!this.state.gender || !this.state.calories) return;
+      const $activeForm = this.getActiveForm();
 
       const packages = [
         "dnevni",
@@ -474,7 +741,7 @@ jQuery(document).ready(function ($) {
           },
           success: (response) => {
             if (response.success) {
-              const $priceElement = $(
+              const $priceElement = $activeForm.find(
                 `.package-buttons .form-button[data-package="${packageType}"] .package-price`
               );
               const price =
@@ -602,8 +869,9 @@ jQuery(document).ready(function ($) {
       }
     }
     updateDateDisplay(displayText) {
-      if (!$("#deliveryDate").length) {
-        $(".date-selection").html(`
+      const $activeForm = this.getActiveForm();
+      if (!$activeForm.find("#deliveryDate").length) {
+        $activeForm.find(".date-selection").html(`
           <div class="calendar-trigger active">
             <div class="date-range-wrapper">
               <div class="date-range-display">
@@ -623,7 +891,7 @@ jQuery(document).ready(function ($) {
         `);
         this.initializeDatepicker();
       } else {
-        const $startDate = $(".start-date");
+        const $startDate = $activeForm.find(".start-date");
         if (displayText) {
           $startDate.text(displayText).addClass("has-date");
         } else {
@@ -660,6 +928,7 @@ jQuery(document).ready(function ($) {
     updatePrice() {
       if (!this.state.gender || !this.state.calories || !this.state.package)
         return;
+      const $activeForm = this.getActiveForm();
 
       $.ajax({
         url: meal_plan_vars.ajax_url,
@@ -677,8 +946,8 @@ jQuery(document).ready(function ($) {
         },
         success: (response) => {
           if (response.success) {
-            $(".meal-plan-price").html(response.data.formatted_price);
-            $(".meal-plan-price-wrapper").show();
+            $activeForm.find(".meal-plan-price").html(response.data.formatted_price);
+            $activeForm.find(".meal-plan-price-wrapper").show();
           }
         },
       });
@@ -687,7 +956,7 @@ jQuery(document).ready(function ($) {
      * WooCommerce kao na single product: pun POST na istu stranicu, pa server radi
      * wp_safe_redirect na korpu/checkout — sesija i kolačići ostaju isti (nema AJAX + JS redirect).
      */
-    prepareMealPlanPostFields($form, buyNow) {
+    prepareMealPlanPostFields($form, buyNow, stayOnPage) {
       $form.find("input.kombo-mp-date").remove();
 
       (this.state.dates || []).forEach((d) => {
@@ -715,6 +984,14 @@ jQuery(document).ready(function ($) {
       }
       $bn.val(buyNow ? "1" : "0");
 
+      let $stay = $form.find('input[name="stay_on_page"]');
+      if (!$stay.length) {
+        $stay = $('<input type="hidden" name="stay_on_page" value="0">').appendTo(
+          $form
+        );
+      }
+      $stay.val(stayOnPage ? "1" : "0");
+
       let $pll = $form.find('input[name="pll_lang"]');
       if (!$pll.length) {
         $pll = $('<input type="hidden" name="pll_lang" value="">').appendTo(
@@ -724,8 +1001,16 @@ jQuery(document).ready(function ($) {
       $pll.val(mpPllLang());
     }
 
-    submitMealPlanToWooCommerce(buyNow = false) {
-      mpTrace("form_post_submit", { buyNow, state: { ...this.state } });
+    submitMealPlanToWooCommerce(
+      buyNow = false,
+      stayOnPage = false,
+      isAddPackage = false
+    ) {
+      mpTrace("form_post_submit", {
+        buyNow,
+        stayOnPage,
+        state: { ...this.state },
+      });
       if (!this.validateForm()) {
         alert(mealTranslations.fillAllFields);
         return;
@@ -737,35 +1022,37 @@ jQuery(document).ready(function ($) {
         return;
       }
 
-      const $button = buyNow
-        ? $(".submit-button.buy-now")
-        : $(".submit-button.add-to-cart");
-      const $otherButton = buyNow
-        ? $(".submit-button.add-to-cart")
-        : $(".submit-button.buy-now");
-      const loadingText = buyNow
-        ? mealTranslations.processing
-        : mealTranslations.addingToCart;
+      const $button = isAddPackage
+        ? $(".km-add-package-floating")
+        : buyNow
+          ? $(".submit-button.buy-now")
+          : $(".submit-button.add-to-cart");
+      const loadingText = isAddPackage
+        ? mealTranslations.addingPackage || mealTranslations.addingToCart
+        : buyNow
+          ? mealTranslations.processing
+          : mealTranslations.addingToCart;
 
       $button.prop("disabled", true).text(loadingText);
-      $otherButton.prop("disabled", true);
+      $(".submit-button, .km-add-package-floating").prop("disabled", true);
 
-      this.prepareMealPlanPostFields($form, buyNow);
+      this.prepareMealPlanPostFields($form, buyNow, stayOnPage);
       // DOM .submit() ne okida jQuery "submit" handler (koji i dalje blokira slučajni submit).
       $form[0].submit();
     }
     initializeDatepicker() {
-      if (!$("#deliveryDate").length) {
+      const $activeForm = this.getActiveForm();
+      if (!$activeForm.find("#deliveryDate").length) {
         $("<input>", {
           type: "text",
           id: "deliveryDate",
           class: "datepicker",
           readonly: true,
           style: "display: none;",
-        }).appendTo(".date-selection");
+        }).appendTo($activeForm.find(".date-selection"));
       }
 
-      const $datepicker = $("#deliveryDate");
+      const $datepicker = $activeForm.find("#deliveryDate");
 
       // Destroy existing datepicker
       if ($datepicker.hasClass("hasDatepicker")) {

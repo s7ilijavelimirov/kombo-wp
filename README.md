@@ -6,7 +6,7 @@ Ovaj repozitorijum prati **samo** ono što tim razvija u okviru `wp-content/`:
 |---------|---------|
 | `themes/kombo/` | Parent tema (stanje sa lajva, dalji razvoj) |
 | `themes/kombo-child/` | Child tema (`Template: kombo`) |
-| `plugins/kombo-plugin/` | Custom plugin (ovde se dodaje logika) |
+| `plugins/kombo-menager/` | Custom plugin *Kombo Manager* (`kombo-manager.php`, text domain `kombo-manager`) |
 
 **Šta nije u Git-u:** ostali pluginovi (WooCommerce, Polylang, itd.), `uploads`, keš i ostalo — vidi `.gitignore`.
 

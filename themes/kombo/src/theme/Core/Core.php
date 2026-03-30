@@ -15,8 +15,6 @@ class Core
         static::RemapTemplates();
 
         add_action("get_html_start", "WpTheme\Core\Core::GetHtmlStart", 10, 2);
-        add_action("get_header", "WpTheme\Core\Core::GetHeader", 10, 2);
-        add_action("get_footer", "WpTheme\Core\Core::GetFooter", 10, 2);
         add_action("get_html_end", "WpTheme\Core\Core::GetHtmlEnd", 10, 2);
         add_action("get_search_form", "WpTheme\Core\Core::GetSearchForm");
     }
@@ -78,16 +76,6 @@ class Core
     static function GetHtmlStart()
     {
         get_template_part("views/partials/html", "start");
-    }
-
-    static function GetHeader($name = null, $args = [])
-    {
-        get_template_part("views/partials/header", $name, $args);
-    }
-
-    static function GetFooter($name = null, $args = [])
-    {
-        get_template_part("views/partials/footer", $name, $args);
     }
 
     static function GetHtmlEnd()

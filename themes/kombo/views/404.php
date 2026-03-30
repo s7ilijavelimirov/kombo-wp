@@ -3,7 +3,7 @@
 $current_lang = pll_current_language();
 $home_url = pll_home_url($current_lang);
 
-do_action("get_header");
+get_header();
 ?>
 
 <div class="error-404-container">
@@ -35,4 +35,4 @@ do_action("get_header");
     </div>
 </div>
 
-<?php do_action("get_footer"); ?>
+<?php get_footer(); ?>
