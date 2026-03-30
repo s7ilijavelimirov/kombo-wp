@@ -3,7 +3,7 @@
 ## name: dev-log
 description: Log completed work to docs/DEVLOG.md. Use at the end of every coding session or after completing a feature, fix, or change.
 
-# Dev Log — kombo-menager
+# Dev Log — kombo-manager
 
 ## On every completed task, append to docs/DEVLOG.md:
 

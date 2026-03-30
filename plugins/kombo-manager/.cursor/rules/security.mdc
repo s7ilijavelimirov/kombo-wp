@@ -1,6 +1,6 @@
 ---
-description: Security rules — always enforced in kombo-menager plugin
-globs: "wp-content/plugins/kombo-menager/**/*.php"
+description: Security rules — always enforced in kombo-manager plugin
+globs: "wp-content/plugins/kombo-manager/**/*.php"
 alwaysApply: true
 ---
 

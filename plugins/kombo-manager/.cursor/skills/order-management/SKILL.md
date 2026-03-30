@@ -1,12 +1,12 @@
 ---
 name: order-management
-description: Implement order creation, manager order-on-behalf-of, reference number generation, payment tracking, or activity logging. Use when working on any order-related feature in kombo-menager plugin.
+description: Implement order creation, manager order-on-behalf-of, reference number generation, payment tracking, or activity logging. Use when working on any order-related feature in kombo-manager plugin.
 ---
 
 # Order Management — Business Logic Reference
 
 ## Read first
-@wp-content/plugins/kombo-menager/docs/sastanak-notes.md — full business requirements
+@wp-content/plugins/kombo-manager/docs/sastanak-notes.md — full business requirements
 
 ---
 

@@ -2,7 +2,7 @@
 
 ### Phase 1 — Scaffold
 
-- Added: kombo-menager.php (plugin header, constants, bootstrap)
+- Added: kombo-manager.php (plugin header, constants, bootstrap)
 - Added: class-autoloader.php (PSR-4 style, kebab-case mapping)
 - Added: class-kombo-manager.php (singleton main class)
 - Added: class-activator.php (stub)

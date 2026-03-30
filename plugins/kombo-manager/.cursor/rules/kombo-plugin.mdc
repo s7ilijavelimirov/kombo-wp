@@ -1,13 +1,13 @@
 ---
 description: Kombo Manager plugin-specific architectural constraints
-globs: "wp-content/plugins/kombo-menager/**/*.php"
+globs: "wp-content/plugins/kombo-manager/**/*.php"
 alwaysApply: false
 ---
 
 # Kombo Manager — Architectural Rules
 
 ## Boundaries
-- Only modify files inside wp-content/plugins/kombo-menager/
+- Only modify files inside wp-content/plugins/kombo-manager/
 - Never touch theme files (kombo/ or kombo-child/)
 - Never modify WooCommerce core or WC template files
 - Extend WC via hooks/filters only

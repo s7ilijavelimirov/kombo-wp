@@ -1,6 +1,6 @@
 ---
-description: Polylang i18n rules for kombo-menager plugin
-globs: "wp-content/plugins/kombo-menager/**/*.php"
+description: Polylang i18n rules for kombo-manager plugin
+globs: "wp-content/plugins/kombo-manager/**/*.php"
 alwaysApply: false
 ---
 
@@ -12,10 +12,10 @@ alwaysApply: false
 - English (en_US)
 
 ## Plugin uses WordPress i18n + Polylang string registration
-- All translatable strings: __('string', 'kombo-menager') or _e('string', 'kombo-menager')
-- Text domain: kombo-menager
+- All translatable strings: __('string', 'kombo-manager') or _e('string', 'kombo-manager')
+- Text domain: kombo-manager
 - Translation files live in: languages/
-- File naming: kombo-menager-sr_RS.po / .mo, kombo-menager-ru_RU.po / .mo
+- File naming: kombo-manager-sr_RS.po / .mo, kombo-manager-ru_RU.po / .mo
 
 ## Polylang custom string registration
 - Every custom string that is NOT in a PHP template must be registered via pll_register_string()

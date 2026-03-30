@@ -1,6 +1,6 @@
 ---
-description: WordPress PHP coding standards for kombo-menager plugin
-globs: "wp-content/plugins/kombo-menager/**/*.php"
+description: WordPress PHP coding standards for kombo-manager plugin
+globs: "wp-content/plugins/kombo-manager/**/*.php"
 alwaysApply: false
 ---
 
@@ -32,5 +32,5 @@ alwaysApply: false
 - Never inline <script> or <style> tags from PHP
 
 ## Translation
-- All user-facing strings: __('string', 'kombo-menager') or _e()
+- All user-facing strings: __('string', 'kombo-manager') or _e()
 - No hardcoded Serbian strings in PHP output

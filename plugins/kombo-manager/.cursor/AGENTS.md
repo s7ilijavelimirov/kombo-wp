@@ -6,11 +6,11 @@ Meal delivery service (Belgrade, Novi Sad, Stara i Nova Pazova).
 This plugin adds order management, manager workflows, kitchen views,
 label printing, payment tracking, and subscription management.
 
-Plugin slug: kombo-menager
+Plugin slug: kombo-manager
 Plugin prefix (functions/options): km_
 Plugin prefix (constants): KM_
 Root namespace: KomboManager
-Text domain: kombo-menager
+Text domain: kombo-manager
 
 ---
 
@@ -19,12 +19,12 @@ WordPress root is open in Cursor. Key paths:
 
 | What | Path |
 |---|---|
-| This plugin | wp-content/plugins/kombo-menager/ |
+| This plugin | wp-content/plugins/kombo-manager/ |
 | Active theme (parent) | wp-content/themes/kombo/ |
 | Active theme (child) | wp-content/themes/kombo-child/ |
 | WooCommerce data map | wp-content/themes/kombo-child/docs/WOOCOMMERCE-DATA-SUMMARY.md |
 | Theme audit | wp-content/themes/kombo-child/docs/theme-full-audit-report.md |
-| Business requirements | wp-content/plugins/kombo-menager/docs/sastanak-notes.md |
+| Business requirements | wp-content/plugins/kombo-manager/docs/sastanak-notes.md |
 
 ---
 
@@ -38,7 +38,7 @@ WordPress root is open in Cursor. Key paths:
    → Understand active hooks, enqueued scripts/styles, template overrides
    → Never register hooks already used by the theme
 
-3. @wp-content/plugins/kombo-menager/docs/sastanak-notes.md
+3. @wp-content/plugins/kombo-manager/docs/sastanak-notes.md
    → Business requirements — fully updated with wireframe details, migration plan, module breakdown, and open questions. Always read before writing any feature.
 
 ---
@@ -56,8 +56,8 @@ WordPress root is open in Cursor. Key paths:
 
 ## Plugin folder structure (enforce this always)
 ```
-kombo-menager/
-├── kombo-menager.php           ← plugin header + bootstrap only
+kombo-manager/
+├── kombo-manager.php           ← plugin header + bootstrap only
 ├── includes/
 │   ├── class-kombo-manager.php     ← main plugin class, singleton
 │   ├── class-autoloader.php        ← maps namespaces to files
@@ -111,7 +111,7 @@ kombo-menager/
 
 ## Phase 1 scope (current)
 Scaffold only:
-- kombo-menager.php (plugin header, constants, bootstrap)
+- kombo-manager.php (plugin header, constants, bootstrap)
 - class-autoloader.php
 - class-kombo-manager.php (main class, singleton, hook registration stub)
 - class-activator.php (stub — DB table creation and role registration will be added Phase 2)
@@ -125,7 +125,7 @@ Clean, extensible foundation only.
 
 ## Rules for Cursor agent behavior
 - Always read the 3 mandatory files above before writing plugin code
-- Never modify files outside wp-content/plugins/kombo-menager/
+- Never modify files outside wp-content/plugins/kombo-manager/
 - Never modify theme files — plugin extends, never overwrites theme
 - Never modify WooCommerce core or WC template files
 - If unsure about existing WC/theme structure → read WOOCOMMERCE-DATA-SUMMARY.md first

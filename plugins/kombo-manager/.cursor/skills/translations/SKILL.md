@@ -1,9 +1,9 @@
 ---
 name: translations
-description: Handle Polylang string registration, i18n setup, or any translation-related task in kombo-menager plugin. Use when adding new user-facing strings, setting up language files, or working with multilingual content.
+description: Handle Polylang string registration, i18n setup, or any translation-related task in kombo-manager plugin. Use when adding new user-facing strings, setting up language files, or working with multilingual content.
 ---
 
-# Translation Workflow — kombo-menager
+# Translation Workflow — kombo-manager
 
 ## Languages
 - Serbian (sr_RS) — default language
@@ -18,7 +18,7 @@ All .po/.mo files → languages/
 
 ### Step 1 — Use __() in PHP
 ```php
-__( 'Your order has been placed', 'kombo-menager' )
+__( 'Your order has been placed', 'kombo-manager' )
 ```
 
 ### Step 2 — Register in class-i18n.php if it's a frontend string
@@ -38,7 +38,7 @@ namespace KomboManager;
 class I18n {
     public function load_plugin_textdomain(): void {
         load_plugin_textdomain(
-            'kombo-menager',
+            'kombo-manager',
             false,
             dirname( plugin_basename( KM_FILE ) ) . '/languages'
         );
@@ -57,14 +57,14 @@ class I18n {
 ## Important: always guard Polylang functions
 ```php
 if ( function_exists( 'pll_register_string' ) ) { ... }
-if ( function_exists( 'pll__' ) ) { ... } else { __( '...', 'kombo-menager' ); }
+if ( function_exists( 'pll__' ) ) { ... } else { __( '...', 'kombo-manager' ); }
 ```
 Plugin must work even if Polylang is deactivated.
 
 ## .po file workflow
-- After adding new strings → update languages/kombo-menager.pot
-- Translator provides kombo-menager-ru_RU.po and kombo-menager-sr_RS.po
-- Compile to .mo with: msgfmt kombo-menager-ru_RU.po -o kombo-menager-ru_RU.mo
+- After adding new strings → update languages/kombo-manager.pot
+- Translator provides kombo-manager-ru_RU.po and kombo-manager-sr_RS.po
+- Compile to .mo with: msgfmt kombo-manager-ru_RU.po -o kombo-manager-ru_RU.mo
 - Or use Poedit
 
 ## String categories for this plugin

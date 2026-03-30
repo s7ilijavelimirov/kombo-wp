@@ -1,18 +1,18 @@
 ---
 name: plugin-scaffold
-description: Scaffold the kombo-menager plugin skeleton. Use when creating initial plugin structure, main plugin file, autoloader, or base classes from scratch.
+description: Scaffold the kombo-manager plugin skeleton. Use when creating initial plugin structure, main plugin file, autoloader, or base classes from scratch.
 ---
 
-# Plugin Scaffold — kombo-menager
+# Plugin Scaffold — kombo-manager
 
 ## Before writing any file
 1. Read @wp-content/themes/kombo-child/docs/WOOCOMMERCE-DATA-SUMMARY.md
 2. Read @wp-content/themes/kombo-child/docs/theme-full-audit-report.md
-3. Read @wp-content/plugins/kombo-menager/docs/sastanak-notes.md
+3. Read @wp-content/plugins/kombo-manager/docs/sastanak-notes.md
 
 ## Files to create in order
 
-### 1. kombo-menager.php (main plugin file)
+### 1. kombo-manager.php (main plugin file)
 - WordPress plugin header (Plugin Name, Description, Version, Author, Text Domain)
 - Define constants: KM_VERSION, KM_FILE, KM_DIR, KM_URL
 - Require autoloader
@@ -52,8 +52,8 @@ description: Scaffold the kombo-menager plugin skeleton. Use when creating initi
 - Phase 1: stub only
 
 ## Folder structure to create
-kombo-menager/
-├── kombo-menager.php
+kombo-manager/
+├── kombo-manager.php
 ├── includes/
 │   ├── class-kombo-manager.php
 │   ├── class-autoloader.php
